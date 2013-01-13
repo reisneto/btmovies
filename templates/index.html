@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block content %}
+		<div class="span{{ span_num }}">
+			{% block query_area %}
+				<!-- <div class="leaderboard"> -->
+		   <div style="text-align:center">
+   		    <h1> Consultas</h1>
+            <p>Nesta área fica os inputs</p>
+            <p><a class="btn btn-success">Buscar</a></p>
+			</div>		  	
+			{% endblock %}
+			
+		   
+		  <div class="row-fluid">
+			  <div class="span12">
+				  <ul class="nav nav-tabs">
+					  <li class="active"> <a href="#">Geral</a></li>
+					  <li> <a href="#">Recomendado por amigos </a></li>
+					  <li> <a href="#">Recomendado para você </a></li>
+			      </ul>
+				  <div class="container-fluid">
+						  <div class="row-fluid">
+							  <div class="span4">
+								<img src="static/nuremberg.jpg" width="150" height="100" alt="bt films logo" />
+							</div>
+							<div class="span8">
+									<p>	The dramatized account of the war crime trials following the defeat of Nazi Germany in World War II.</p>
+
+							</div>
+						  </div>
+						  <hr/>
+
+						<div class="row-fluid">
+							  <div class="span4">
+								<img src="static/gattaca.jpg" width="150" height="100" alt="bt films logo" />
+							</div>
+							<div class="span8">
+									<p>A genetically inferior man assumes the identity of a superior one in order to pursue his lifelong dream of space travel.</p>
+							</div>
+						  </div>
+						<hr/>
+							<div class="row-fluid">
+							  <div class="span4">
+								<img src="static/beautifulmind.jpg" width="150" height="100" alt="bt films logo" />
+							</div>
+							<div class="span8">
+									<p>After a brilliant but asocial mathematician accepts secret work in cryptography, his life takes a turn to the nightmarish.</p>
+							</div>
+						  </div>
+	
+				  </div>
+            </div><!--/span-->
+		</div><!--/row-->
+          <hr>
+{% endblock content %}

@@ -55,6 +55,8 @@ def crawler(link):
 	for writer in writers:
 		print '\t' + writer
 	
+
+	
 crawler(LINK)
 
 

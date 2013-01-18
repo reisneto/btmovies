@@ -1,55 +1,110 @@
 {% extends "base.html" %}
 {% block content %}
-		<div class="span{{ span_num }}">
-			{% block query_area %}
-				<!-- <div class="leaderboard"> -->
-		   <div style="text-align:center">
-   		    <h1> Consultas</h1>
-            <p>Nesta área fica os inputs</p>
-            <p><a class="btn btn-success">Buscar</a></p>
-			</div>		  	
-			{% endblock %}
+		
+		<div class="span6" style="position: relative; left: 280px;">
 			
 		   
 		  <div class="row-fluid">
-			  <div class="span12">
-				  <ul class="nav nav-tabs">
+			  <div class="span12" style= "margin-right:auto; width:100%;">
+				  <ul class="nav nav-tabs" >
 					  <li class="active"> <a href="#">Geral</a></li>
-					  <li> <a href="#">Recomendado por amigos </a></li>
-					  <li> <a href="#">Recomendado para você </a></li>
+					  {% block userlogado %}
+					  {% endblock userlogado %}
+					  
 			      </ul>
 				  <div class="container-fluid">
-						  <div class="row-fluid">
-							  <div class="span4">
-								<img src="static/nuremberg.jpg" width="150" height="100" alt="bt films logo" />
+						 <div class="row-fluid" >
+							<div >
+							 	
+								
+								<div class = "pull-right">
+									<select class="navbar-form">
+									  <option value="volvo">Volvo</option>
+									  <option value="saab">Saab</option>
+									  <option value="mercedes">Mercedes</option>
+									  <option value="audi">Audi</option>
+									</select>
+								</div>
+								<p class = "pull-right" style="margin-top: 5px; margin-right: 5px;">Ordenar por:</p>	
+								
+										
+								
+															
+							</div>			
+						 </div>
+						 
+						 <!--Inicio bloco Conteudo de filmes-->
+						 
+						   <div class="row-fluid" >
+							  <div class="span2">
+								<img src="static/image/nuremberg.jpg" width="150" height="100" alt="bt films logo" style="padding-left: 15px; padding-top: 15px; padding-bottom: 15px;" />
 							</div>
-							<div class="span8">
-									<p>	The dramatized account of the war crime trials following the defeat of Nazi Germany in World War II.</p>
-
+							<div class="span3" >
+									<ul class="nav nav-list" style="padding-left: 10px; padding-top: 15px; padding-bottom: 15px; ">
+										<li>Filme: LOL</li>
+										<li>Ano: 99999</li>
+										<li>Diretor: LOlaldo</li>
+										<li>Roteirista: Loles</li>
+										<li>Atores Pricipais: Lolinha, lolita</li>
+										<li>Rate: 10</li>
+									</ul>
+							
+							</div>
+							<div class="span5" style="padding-top: 15px; padding-bottom: 15px; border-left-style:solid; border-width:1px; border-color: #eeeeee; padding-left: 15px;">			
+									<div>Descrição:</div>
+									<p>Armazene qualquer ficheiro no seu SkyDrive gratuito que ficará
+									automaticamente disponível no seu telefone e nos seus computadores,
+									sem precisar de cabos ou sincronização. Adicione o SkyDrive aos seus
+									computadores, dispositivos e telefone e terá sempre à mão os seus documentos,
+									as suas notas, fotografias e os vídeos importantes.</p>
 							</div>
 						  </div>
 						  <hr/>
-
-						<div class="row-fluid">
-							  <div class="span4">
-								<img src="static/gattaca.jpg" width="150" height="100" alt="bt films logo" />
-							</div>
-							<div class="span8">
-									<p>A genetically inferior man assumes the identity of a superior one in order to pursue his lifelong dream of space travel.</p>
-							</div>
-						  </div>
-						<hr/>
-							<div class="row-fluid">
-							  <div class="span4">
-								<img src="static/beautifulmind.jpg" width="150" height="100" alt="bt films logo" />
-							</div>
-							<div class="span8">
-									<p>After a brilliant but asocial mathematician accepts secret work in cryptography, his life takes a turn to the nightmarish.</p>
-							</div>
-						  </div>
-	
-				  </div>
+						  
+						
             </div><!--/span-->
 		</div><!--/row-->
           <hr>
 {% endblock content %}
+
+   
+{% block login %}
+<script src="static/scripts/login.js"></script>
+ <script src="static/scripts/Jquery.js"></script>
+ 
+        <div id="navbar-text pull-right">
+            <!-- Login Starts Here -->
+            <div id="loginContainer">
+                <a href="#" id="loginButton"><span>Login</span><em></em></a>
+		<div class = "pull-right"  style = "padding-top: 0.4cm; padding-right: 0.3cm;" >	
+         	 <a href="Cadastro"><span>Ainda não se cadastrou?</span><em></em></a>
+		</div>               
+		<div style="clear:both"></div>
+                <div id="loginBox">                
+                    <form id="loginForm">
+                        <fieldset id="body">
+                            <fieldset>
+                                <label for="email">Login</label>
+                                <input type="text" name="email" id="email" />
+                            </fieldset>
+                            <fieldset>
+                                <label for="password">Senha</label>
+                                <input type="password" name="password" id="password" />
+                            </fieldset>
+                            <input type="submit" id="login" value="Sign in" />
+                            <label for="checkbox"><input type="checkbox" id="checkbox" />Lembre-me</label>
+                        </fieldset>
+                        <span><a href="#">Esqueceu sua senha, caralho?</a></span>
+                    </form>
+                </div>
+ 
+	    		
+            <!-- Login Ends Here -->
+        </div>
+	
+		
+	 
+    </div>
+	
+			
+{% endblock login %}

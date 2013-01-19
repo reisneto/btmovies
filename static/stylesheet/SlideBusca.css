@@ -1,0 +1,8 @@
+.slideGeneros {
+  position: relative;
+}
+.slideGeneros .inner {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}

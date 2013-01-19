@@ -81,8 +81,7 @@ CREATE TABLE amizade (
     am_codigo integer NOT NULL,
     am_usuario integer NOT NULL,
     am_amigo integer NOT NULL,
-    am_confianca smallint DEFAULT 0,
-    am_data timestamp without time zone
+    am_confianca smallint DEFAULT 0
 );
 
 
@@ -177,11 +176,25 @@ ALTER SEQUENCE fabricante_fb_codigo_seq OWNED BY fabricante.fb_codigo;
 
 
 --
+-- Name: films_filmid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE films_filmid_seq
+    START WITH 1682
+    INCREMENT BY 1
+    MINVALUE 11
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.films_filmid_seq OWNER TO postgres;
+
+--
 -- Name: films; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE films (
-    filmid integer NOT NULL,
+    filmid integer DEFAULT nextval('films_filmid_seq'::regclass) NOT NULL,
     title character varying(500) DEFAULT NULL::character varying,
     imdb character varying(500) DEFAULT NULL::character varying,
     unknown character(1) DEFAULT NULL::bpchar,
@@ -2185,6 +2198,12 @@ COPY actors (idactor, name) FROM stdin;
 1774	Michael Imperioli
 1775	Joyce Phillips
 1776	Asia Argento
+1777	actor4
+1778	actor5
+1779	actor6
+1801	actor1
+1802	actor2
+1803	actor3
 \.
 
 
@@ -2192,7 +2211,7 @@ COPY actors (idactor, name) FROM stdin;
 -- Name: actors_idactor_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('actors_idactor_seq', 1776, true);
+SELECT pg_catalog.setval('actors_idactor_seq', 1803, true);
 
 
 --
@@ -2681,9 +2700,6 @@ COPY actorsfilm (idfilm, idactor) FROM stdin;
 244	406
 244	407
 244	408
-246	409
-246	410
-246	411
 247	412
 247	413
 247	414
@@ -2723,9 +2739,6 @@ COPY actorsfilm (idfilm, idactor) FROM stdin;
 264	46
 264	439
 264	440
-266	441
-266	442
-266	443
 268	409
 268	410
 268	411
@@ -2786,9 +2799,6 @@ COPY actorsfilm (idfilm, idactor) FROM stdin;
 294	80
 294	472
 294	473
-297	101
-297	474
-297	475
 298	134
 298	402
 298	476
@@ -2849,9 +2859,6 @@ COPY actorsfilm (idfilm, idactor) FROM stdin;
 328	66
 328	419
 328	373
-329	389
-329	502
-329	503
 332	43
 332	504
 332	229
@@ -3155,9 +3162,6 @@ COPY actorsfilm (idfilm, idactor) FROM stdin;
 499	692
 499	626
 499	693
-500	383
-500	482
-500	483
 501	694
 501	695
 501	696
@@ -3454,9 +3458,6 @@ COPY actorsfilm (idfilm, idactor) FROM stdin;
 669	865
 669	866
 669	867
-670	765
-670	766
-670	767
 671	868
 671	869
 671	870
@@ -3865,15 +3866,9 @@ COPY actorsfilm (idfilm, idactor) FROM stdin;
 875	38
 875	151
 875	134
-876	163
-876	1065
-876	1066
 877	536
 877	1067
 877	956
-878	967
-878	1068
-878	1069
 880	477
 880	1070
 880	1060
@@ -4392,9 +4387,6 @@ COPY actorsfilm (idfilm, idactor) FROM stdin;
 1174	1279
 1174	1309
 1174	1310
-1175	1311
-1175	1177
-1175	558
 1177	939
 1177	700
 1177	1312
@@ -4503,9 +4495,6 @@ COPY actorsfilm (idfilm, idactor) FROM stdin;
 1233	1362
 1233	1363
 1233	1364
-1234	1365
-1234	1366
-1234	1367
 1239	991
 1239	327
 1239	929
@@ -4895,9 +4884,6 @@ COPY actorsfilm (idfilm, idactor) FROM stdin;
 1476	1601
 1476	1040
 1476	1602
-1477	663
-1477	368
-1477	181
 1478	998
 1478	1603
 1478	1065
@@ -5188,10 +5174,13 @@ COPY actorsfilm (idfilm, idactor) FROM stdin;
 1679	1776
 1679	1164
 1679	1330
-1680	455
-1680	1549
-1680	1550
 1681	73
+1682	1777
+1682	1778
+1682	1779
+1693	1801
+1693	1802
+1693	1803
 \.
 
 
@@ -5199,7 +5188,7 @@ COPY actorsfilm (idfilm, idactor) FROM stdin;
 -- Data for Name: amizade; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY amizade (am_codigo, am_usuario, am_amigo, am_confianca, am_data) FROM stdin;
+COPY amizade (am_codigo, am_usuario, am_amigo, am_confianca) FROM stdin;
 \.
 
 
@@ -5911,6 +5900,8 @@ COPY directors (iddirector, name) FROM stdin;
 704	Pier Paolo Pasolini
 705	Gary Winick
 706	Michael Radford
+716	director2
+737	director1
 \.
 
 
@@ -5918,7 +5909,7 @@ COPY directors (iddirector, name) FROM stdin;
 -- Name: directors_iddirector_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('directors_iddirector_seq', 706, true);
+SELECT pg_catalog.setval('directors_iddirector_seq', 739, true);
 
 
 --
@@ -5942,6 +5933,7 @@ SELECT pg_catalog.setval('fabricante_fb_codigo_seq', 1, false);
 
 COPY films (filmid, title, imdb, unknown, action, adventure, animation, children, comedy, crime, documentary, drama, fantasy, filmnoir, horror, musical, mystery, romance, scifi, thriller, war, western, rating, director, year, sinopse, image) FROM stdin;
 1185	In the Army Now	http://us.imdb.com/M/title-exact?In%20the%20Army%20Now%20(1994)	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	1	0	4.30000019	519	1994	Two misguided youths join the reserves to make some money for their entrepreneurial dreams. No sooner...	img_1185.jpg
+1682	film2	fil2.com	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	9	716	2013	sinopse2	image_2.jpg
 3	Four Rooms	http://us.imdb.com/M/title-exact?Four%20Rooms%20(1995)	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	6.5	12	1995	Four interlocking tales that take place in a fading hotel on New Year&#x27;s Eve.	img_3.jpg
 5	Copycat	http://us.imdb.com/M/title-exact?Copycat%20(1995)	0	0	0	0	0	0	1	0	1	0	0	0	0	0	0	0	1	0	0	6.5	14	1995	An agoraphobic psychologist and a female detective must work together to take down a serial killer who copies serial killers from the past.	img_5.jpg
 7	Twelve Monkeys	http://us.imdb.com/M/title-exact?Twelve%20Monkeys%20(1995)	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	1	0	0	0	8.10000038	16	1995	In a future world devastated by disease, a convict is sent back in time to gather information about the man-made virus that wiped out most of the human population on the planet.	img_7.jpg
@@ -6020,14 +6012,12 @@ COPY films (filmid, title, imdb, unknown, action, adventure, animation, children
 234	Jaws	http://us.imdb.com/M/title-exact?Jaws%20(1975)	0	1	0	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	8.19999981	65	1975	When a gigantic great white shark begins to menace the small island community of Amity, a police chief, a marine scientist and grizzled fisherman set out to stop it.	img_234.jpg
 237	Jerry Maguire	http://us.imdb.com/M/title-exact?Jerry%20Maguire%20(1996)	0	0	0	0	0	0	0	0	1	0	0	0	0	0	1	0	0	0	0	7.19999981	138	1996	When a sports agent has a moral epiphany and is fired for expressing it, he decides to put his new philosophy to the test as an independent with the only athlete who stays with him.	img_237.jpg
 239	Sneakers	http://us.imdb.com/M/title-exact?Sneakers%20(1992)	0	0	0	0	0	0	1	0	1	0	0	0	0	0	0	1	0	0	0	7	127	1992	Complex but lighthearted thriller about computers and cryptography, government and espionage, secrets and deception and betrayal.	img_239.jpg
-246	Chasing Amy	http://us.imdb.com/M/title-exact?Chasing+Amy+(1997)	0	0	0	0	0	0	0	0	1	0	0	0	0	0	1	0	0	0	0	7.4000001	140	1997	Holden and Banky are comic book artists. Everything&#x27;s going good for them until they meet Alyssa, also a comic book artist. Holden falls for her, but his hopes are crushed when he finds out she&#x27;s a lesbian.	img_246.jpg
 249	Austin Powers: International Man of Mystery	http://us.imdb.com/M/title-exact?Austin%20Powers%3A%20International%20Man%20of%20Mystery%20%281997%29	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	7	143	1997	A 1960s hipster secret agent is brought out of cryofreeze to oppose his greatest enemy in the 1990s, where his social attitudes are glaringly out of place.	img_249.jpg
 1190	That Old Feeling	http://us.imdb.com/M/title-exact?That%20Old%20Feeling%20(1997)	0	0	0	0	0	1	0	0	0	0	0	0	0	0	1	0	0	0	0	5.80000019	282	1997	A bride&#x27;s divorced parents find their old feelings for each other during the wedding reception and over the course of the next few days upsetting the newlywed&#x27;s honeymoon.	img_1190.jpg
 256	When the Cats Away (Chacun cherche son chat)	http://us.imdb.com/M/title-exact?Chacun+cherche+son+chat+(1996)	0	0	0	0	0	1	0	0	0	0	0	0	0	0	1	0	0	0	0	6.80000019	145	1996	Chloe, a young woman, is going on holidays. She entrusts her beloved cat to Madame Ren&#xE9;e&#x27;s care...	img_256.jpg
 259	George of the Jungle	http://us.imdb.com/M/title-exact?George+of+the+Jungle+(1997)	0	0	0	0	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	5.30000019	146	1997	George grows up in the jungle raised by apes. Based on the Cartoon series.	img_259.jpg
 261	Air Bud	http://us.imdb.com/M/title-exact?Air+Bud+(1997)	0	0	0	0	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	4.69999981	148	1997	A young boy and a talented stray dog with an amazing basketball playing ability become instant friends...	img_261.jpg
 263	Steel	http://us.imdb.com/M/title-exact?Steel+(1997)	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	2.70000005	150	1997	John Henry Irons designs weapons for the military. When his project to create weapons that harmlessly neutralize soldiers is sabotaged...	img_263.jpg
-266	Kull the Conqueror	http://us.imdb.com/M/title-exact?Kull+the+Conqueror+(1997)	0	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	4.5999999	152	1997	An barbarian warrior becomes a king when he defeats a king in armed combat and the king&#x27;s heir conspire to overthrow him and reclaim the throne by resurrecting an evil sorceress.	img_266.jpg
 270	Gattaca	http://us.imdb.com/M/title-exact?Gattaca+(1997)	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	1	1	0	0	7.80000019	153	1997	A genetically inferior man assumes the identity of a superior one in order to pursue his lifelong dream of space travel.	img_270.jpg
 273	Heat	http://us.imdb.com/M/title-exact?Heat%20(1995)	0	1	0	0	0	0	1	0	0	0	0	0	0	0	0	0	1	0	0	8.30000019	154	1995	A group of professional bank robbers start to feel the heat from police when they unknowingly leave a clue at their latest heist.	img_273.jpg
 276	Leaving Las Vegas	http://us.imdb.com/M/title-exact?Leaving%20Las%20Vegas%20(1995)	0	0	0	0	0	0	0	0	1	0	0	0	0	0	1	0	0	0	0	7.5999999	157	1995	Ben Sanderson, an alcoholic Hollywood screenwriter who lost everything because of his drinking, arrives in Las Vegas to drink himself to death. There, he meets and forms an uneasy friendship and non-interference pact with prostitute Sera.	img_276.jpg
@@ -6095,7 +6085,6 @@ COPY films (filmid, title, imdb, unknown, action, adventure, animation, children
 489	Notorious	http://us.imdb.com/M/title-exact?Notorious%20(1946)	0	0	0	0	0	0	0	0	0	0	1	0	0	0	1	0	1	0	0	8.19999981	116	1946	A woman is asked to spy on a group of Nazi friends in South America. How far will she have to go to ingratiate herself with them?	img_489.jpg
 492	East of Eden	http://us.imdb.com/M/title-exact?East%20of%20Eden%20(1955)	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	8	246	1955	In the Salinas Valley, in and around World War I, Cal Trask feels he must compete against overwhelming odds with his brother Aron for the love of their father Adam...	img_492.jpg
 496	It's a Wonderful Life	http://us.imdb.com/M/title-exact?It's%20a%20Wonderful%20Life%20(1946)	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	8.69999981	96	1946	An angel helps a compassionate but despairingly frustrated businessman by showing what life would have been like if he never existed.	img_496.jpg
-500	Fly Away Home	http://us.imdb.com/M/title-exact?Fly%20Away%20Home%20(1996)	0	0	1	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	6.80000019	172	1996	A father and daughter decide to attempt to lead a flock of orphaned Canada Geese south by air.	img_500.jpg
 501	Dumbo	http://us.imdb.com/M/title-exact?Dumbo%20(1941)	0	0	0	1	1	0	0	0	0	0	0	0	1	0	0	0	0	0	0	7.4000001	249	1941	Ridiculed because of his enormous ears, a young circus elephant is assisted by a mouse to achieve his full potential.	img_501.jpg
 504	Bonnie and Clyde	http://us.imdb.com/M/title-exact?Bonnie%20and%20Clyde%20(1967)	0	0	0	0	0	0	1	0	1	0	0	0	0	0	0	0	0	0	0	8	250	1967	A somewhat romanticized account of the career of the notoriously violent bank robbing couple and their gang.	img_504.jpg
 1203	Top Hat	http://us.imdb.com/M/title-exact?Top%20Hat%20(1935)	0	0	0	0	0	1	0	0	0	0	0	0	1	0	1	0	0	0	0	7.69999981	525	1935	An American dancer comes to Britain and falls for a model whom he initially annoyed, but she mistakes him for his goofy producer.	img_1203.jpg
@@ -6114,6 +6103,7 @@ COPY films (filmid, title, imdb, unknown, action, adventure, animation, children
 550	Die Hard: With a Vengeance	http://us.imdb.com/M/title-exact?Die%20Hard:%20With%20a%20Vengeance%20(1995)	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	7.5	101	1995	John McClane and a store owner must play a bomber&#x27;s deadly game as they race around New York while trying to stop him.	img_550.jpg
 552	Species	http://us.imdb.com/M/title-exact?Species%20(1995)	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	5.69999981	176	1995	A message from outer space contains instructions on how to modify human DNA.	img_552.jpg
 1270	Life with Mikey	http://us.imdb.com/M/title-exact?Life%20with%20Mikey%20(1993)	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	5.19999981	545	1993	Michael J. Fox stars as a child actor who has grown up, and grown out of his popularity. He now runs a talent agency with his brother...	img_1270.jpg
+1693	film1	film1.com	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	9	737	2012	sinopse1	image_1.jpg
 558	Heavenly Creatures	http://us.imdb.com/M/title-exact?Heavenly%20Creatures%20(1994)	0	0	0	0	0	0	0	0	1	1	0	0	0	0	0	0	1	0	0	7.5	271	1994	Two girls have an intense fantasy life; their parents, concerned the fantasy is too intense, separate them, and the girls take revenge.	img_558.jpg
 565	Village of the Damned	http://us.imdb.com/M/title-exact?Village%20of%20the%20Damned%20(1995)	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	1	0	0	5.4000001	272	1995	A small town&#x27;s women give birth to unfriendly alien children posing as humans.	img_565.jpg
 569	Wolf	http://us.imdb.com/M/title-exact?Wolf%20(1994)	0	0	0	0	0	0	0	0	1	0	0	1	0	0	0	0	0	0	0	6.0999999	274	1994	Publisher Will Randall becomes a werewolf and has to fight to keep his job.	img_569.jpg
@@ -6147,7 +6137,6 @@ COPY films (filmid, title, imdb, unknown, action, adventure, animation, children
 661	High Noon	http://us.imdb.com/M/title-exact?High%20Noon%20(1952)	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	8.19999981	309	1952	A marshall, personally compelled to face a returning deadly enemy, finds that his own town refuses to help him.	img_661.jpg
 663	Being There	http://us.imdb.com/M/title-exact?Being%20There%20(1979)	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	8	217	1979	Chance, a simple gardener, has never left the estate until his employer dies. His simple TV-informed utterances are mistaken for profundity.	img_663.jpg
 667	Audrey Rose	http://us.imdb.com/M/title-exact?Audrey%20Rose%20(1977)	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	5.69999981	225	1977	A stranger attempts to convince a happily married couple that their daughter is actually his daughter reincarnated.	img_667.jpg
-670	Body Snatchers	http://us.imdb.com/M/title-exact?Body%20Snatchers%20(1993)	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	1	1	0	0	5.80000019	277	1993	A teenage girl and her father discover alien clones are replacing humans on a remote U.S. military base in Alabama.	img_670.jpg
 672	Candyman	http://us.imdb.com/M/title-exact?Candyman%20(1992)	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	6.5	313	1992	The Candyman, a murderous soul with a hook for a hand, is accidentally summoned to reality by a skeptic grad student researching the monster&#x27;s myth.	img_672.jpg
 675	Nosferatu (Nosferatu, eine Symphonie des Grauens)	http://us.imdb.com/M/title-exact?Nosferatu,%20eine%20Symphonie%20des%20Grauens%20(1922)	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	8	316	1922	Vampire Count Orlok expresses interest in a new residence and real estate agent Hutter&#x27;s wife. Silent classic based on the story &#x22;Dracula.&#x22;	img_675.jpg
 678	Volcano	http://us.imdb.com/M/title-exact?Volcano%20%281997%29	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	1	0	0	5.30000019	318	1997	A volcano erupts in downtown L.A., threatening to destroy the city.	img_678.jpg
@@ -6213,8 +6202,6 @@ COPY films (filmid, title, imdb, unknown, action, adventure, animation, children
 870	Touch	http://us.imdb.com/M/title-exact?Touch%20(1997)	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	5.69999981	315	1997	When Juvenal, a presumed miracle worker, appears on the scene Bill Hill attempts to exploit him but...	img_870.jpg
 872	Love Jones	http://us.imdb.com/M/title-exact?Love%20Jones%20(1997)	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	6.80000019	394	1997	Darius Lovehall is a young black poet in Chicago who starts dating Nina Moseley, a beautiful and talented photographer...	img_872.jpg
 874	Career Girls	http://us.imdb.com/M/title-exact?Career+Girls+(1997)	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	7	162	1997	2 young women reunite and rekindle their friendship after having said goodbye at their college graduation, six years earlier.	img_874.jpg
-876	Money Talks	http://us.imdb.com/M/title-exact?Money+Talks+(1997)	0	1	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	5.80000019	396	1997	Sought by police and criminals, a small-time huckster makes a deal with a TV newsman for protection.	img_876.jpg
-878	That Darn Cat!	http://us.imdb.com/M/title-exact?That%20Darn%20Cat%20(1997)	0	0	0	0	1	1	0	0	0	0	0	0	0	1	0	0	0	0	0	4.4000001	397	1997	A maid is kidnapped and scratches a message onto D.C. the cat&#x27;s collar and when his owner Patti discovers this, she plays amateur detective with the help of D.C. to try to find the culprits.	img_878.jpg
 881	Money Talks	http://us.imdb.com/M/title-exact?Money+Talks+(1997)	0	1	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	5.80000019	396	1997	Sought by police and criminals, a small-time huckster makes a deal with a TV newsman for protection.	img_881.jpg
 884	Year of the Horse	http://us.imdb.com/M/title-exact?Year+of+the+Horse+(1997)	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	6.5	255	1997	This film documents Neil Young and Crazy Horse&#x27;s 1996 concert tour. Jim Jarmusch interviews the band about their long history, and we see backstage footage from the 1970s and 1980s.	img_884.jpg
 885	Phantoms	http://us.imdb.com/M/title-exact?Phantoms+(1998)	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	5.19999981	381	1998	150 dead and 350 missing in the tiny mountain town of Snowfield, Colorado. And that&#x27;s only the beginning...	img_885.jpg
@@ -6304,7 +6291,6 @@ COPY films (filmid, title, imdb, unknown, action, adventure, animation, children
 1206	Amos & Andrew	http://us.imdb.com/M/title-exact?Amos%20&%20Andrew%20(1993)	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	5.30000019	526	1993	When Andrew Sterling, a successful black urbanite writer buys a vacation home on a resort in New England the police mistake him for a burglar...	img_1206.jpg
 1169	Fresh	http://us.imdb.com/M/title-exact?Fresh%20(1994)	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	7.5	511	1994	Michael (or Fresh as he&#x27;s well known) is a 12-year-old drug pusher who lives in a crowded housing project with his cousins and aunt...	img_1169.jpg
 1173	Bliss	http://us.imdb.com/M/title-exact?Bliss%20(1997)	0	0	0	0	0	0	0	0	1	0	0	0	0	0	1	0	0	0	0	5.80000019	513	1997	Joseph and Maria are married for six months and Maria still has never had an orgasm with her husband...	img_1173.jpg
-1175	Hugo Pool	http://us.imdb.com/M/title-exact?Hugo+Pool+(1997)	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	4.9000001	515	1997	Hugo Pool is a quirky tale of a Los Angeles pool cleaner who falls in love with a young man dying of Lou Gerhig&#x27;s Disease.	img_1175.jpg
 1179	Man of the House	http://us.imdb.com/M/title-exact?Man%20of%20the%20House%20(1995)	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	4.5	517	1995	Ben Archer is not happy. His mother, Sandy, has just met a man, and it looks like things are pretty serious...	img_1179.jpg
 1182	Cops and Robbersons	http://us.imdb.com/M/title-exact?Cops%20and%20Robbersons%20(1994)	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	4.69999981	518	1994	When police discover that a mob hitman has moved in next door to the Robbersons, they want to find out what he is up to...	img_1182.jpg
 1208	Kiss of Death	http://us.imdb.com/M/title-exact?Kiss%20of%20Death%20(1995)	0	0	0	0	0	0	1	0	1	0	0	0	0	0	0	0	1	0	0	5.80000019	180	1995	A reformed convict goes undercover with the help of an angry detective to ensnare a psychotic mobster.	img_1208.jpg
@@ -6316,7 +6302,6 @@ COPY films (filmid, title, imdb, unknown, action, adventure, animation, children
 1230	Ready to Wear (Pret-A-Porter)	http://us.imdb.com/Title?Pr%EAt-%E0-Porter+(1994)	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	4.80000019	91	1994	A fashion show in Paris draws the usual bunch of people; designers, reporters, models, magazine editors...	img_1230.jpg
 1231	Marked for Death	http://us.imdb.com/M/title-exact?Marked%20for%20Death%20(1990)	0	1	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	5.5	36	1990	Chicago DEA agent John Hatcher has just returned from Colombia, where his partner was killed in the line of duty by a drug dealer who has since been taken down...	img_1231.jpg
 1233	Nénette et Boni	http://us.imdb.com/Title?N%E9nette+et+Boni+(1996)	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	6.9000001	536	1996	Teenage siblings Nenette and Boni were raised apart as a result of their parents&#x27; divorce. Their mother...	img_1233.jpg
-1234	Chairman of the Board	http://us.imdb.com/Title?Chairman+of+the+Board+(1998)	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	2.0999999	537	1998	A surfer becomes the head of a major company.	img_1234.jpg
 1245	Gridlock'd	http://us.imdb.com/M/title-exact?Gridlock'd%20(1997)	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	6.80000019	539	1997	After a friend overdoses, Spoon and Stretch decide to kick their drug habits and attempt to enroll in a government detox program...	img_1245.jpg
 1249	For Love or Money	http://us.imdb.com/M/title-exact?For%20Love%20or%20Money%20(1993)	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	5.9000001	13	1993	Doug is a young man who works all day as a concierge at a luxurious hotel, saving money to make his own business...	img_1249.jpg
 1254	Gone Fishin'	http://us.imdb.com/M/title-exact?Gone%20Fishin'%20(1997)	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	4.30000019	135	1997	Two fishing fanatics get in trouble when their fishing boat gets stolen while on a trip.	img_1254.jpg
@@ -6531,7 +6516,6 @@ COPY films (filmid, title, imdb, unknown, action, adventure, animation, children
 288	Scream	http://us.imdb.com/M/title-exact?Scream%20(1996)	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	1	0	0	7.19999981	164	1996	A killer known as Ghostface begins killing off teenagers, and as the body count begins rising, one girl and her friends find themselves contemplating the &#x22;Rules&#x22; of horror films as they find themselves living in a real-life one.	img_288.jpg
 291	Absolute Power	http://us.imdb.com/M/title-exact?Absolute%20Power%20(1997)	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	1	0	0	6.5999999	121	1997	A career thief witnesses a horrific crime involving the U.S. President.	img_291.jpg
 293	Donnie Brasco	http://us.imdb.com/M/title-exact?Donnie%20Brasco%20(1997)	0	0	0	0	0	0	1	0	1	0	0	0	0	0	0	0	0	0	0	7.80000019	59	1997	An FBI undercover agent infilitrates the mob and finds himself identifying more with the mafia life to the expense of his regular one.	img_293.jpg
-297	Ulee's Gold	http://us.imdb.com/M/title-exact?Ulee%27s+Gold+(1997)	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	7	167	1997	A reclusive beekeeper slowly pulls his dysfunctional family back together, but not without having to fight his son&#x27;s previous dastardly cohorts.	img_297.jpg
 299	Hoodlum	http://us.imdb.com/M/title-exact?Hoodlum+(1997)	0	0	0	0	0	0	1	0	1	0	1	0	0	0	0	0	0	0	0	5.9000001	169	1997	Black gangsters in 1930 Harlem fights Dutch Schultz who is trying to horn in on their numbers racket.	img_299.jpg
 300	Air Force One	http://us.imdb.com/M/title-exact?Air+Force+One+(1997)	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	6.30000019	50	1997	Hijackers seize the plane carrying the President of the United States and his family, but he (an ex-soldier) works from hiding to defeat them.	img_300.jpg
 302	L.A. Confidential	http://us.imdb.com/M/title-exact?L%2EA%2E+Confidential+(1997)	0	0	0	0	0	0	1	0	0	0	1	0	0	1	0	0	1	0	0	8.39999962	171	1997	As corruption grows in 1950s LA, three policemen - the straight-laced, the brutal, and the sleazy - investigate a series of murders with their own brand of justice.	img_302.jpg
@@ -6543,7 +6527,6 @@ COPY films (filmid, title, imdb, unknown, action, adventure, animation, children
 323	Dante's Peak	http://us.imdb.com/M/title-exact?Dante's%20Peak%20(1997)	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	5.69999981	176	1997	A vulcanologist arrives at a countryside named Dante&#x27;s Peak after a long dormant volcano, which has recently been named the second most desirable place to live in America, and discovers that Dante&#x27;s Peak, may wake up at any moment.	img_323.jpg
 325	Crash	http://us.imdb.com/M/title-exact?Crash%20(1996)	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	1	0	0	6.30000019	178	1996	After getting into a serious car accident, a TV director discovers an underground sub-culture of scarred, omnisexual car-crash victims who use car accidents and the raw sexual energy they produce to try to rejuvenate his sex life with his wife.	img_325.jpg
 327	Cop Land	http://us.imdb.com/M/title-exact?Cop+Land+(1997)	0	0	0	0	0	0	1	0	1	0	0	0	0	1	0	0	0	0	0	6.9000001	179	1997	The sheriff of a suburban New Jersey community populated by New York City policemen slowly discovers the town is a front for mob connections and corruption.	img_327.jpg
-329	Desperate Measures	http://us.imdb.com/Title?Desperate+Measures+(1998)	0	0	0	0	0	0	1	0	1	0	0	0	0	0	0	0	1	0	0	5.9000001	180	1998	San Francisco police officer Frank Connor is in a frantic search for a compatible bone marrow donor for his gravely ill son...	img_329.jpg
 334	U Turn	http://us.imdb.com/Title?U+Turn+(1997)	0	1	0	0	0	0	1	0	0	0	0	0	0	1	0	0	0	0	0	6.69999981	49	1997	A drifter becomes entangled with a femme fatale and her husband after his car breaks down in their small Southwest town.	img_334.jpg
 335	How to Be a Player	http://us.imdb.com/M/title-exact?How+to+Be+a+Player+(1997)	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	4.69999981	182	1997	A playboy gets the tables turned on him when a party is arranged with all of the women he has been two-timing are in attendance.	img_335.jpg
 339	Mad City	http://us.imdb.com/M/title-exact?Mad+City+(1997)	0	1	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	6.0999999	185	1997	A normal guy blows his top, and a news reporter turns into a national spectacle.	img_339.jpg
@@ -6889,7 +6872,6 @@ COPY films (filmid, title, imdb, unknown, action, adventure, animation, children
 1469	Tom and Huck	http://us.imdb.com/M/title-exact?Tom%20and%20Huck%20(1995)	0	0	1	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	5.5	627	1995	A mischievous young boy, Tom Sawyer (<a  href="/name/nm0001795/"	img_1469.jpg
 1474	Nina Takes a Lover	http://us.imdb.com/M/title-exact?Nina%20Takes%20a%20Lover%20(1994)	0	0	0	0	0	1	0	0	0	0	0	0	0	0	1	0	0	0	0	5.4000001	628	1994	When Ninas husband goes off for a few weeks to work, she meets and starts seeing a photographer. This...	img_1474.jpg
 1475	Bhaji on the Beach	http://us.imdb.com/M/title-exact?Bhaji%20on%20the%20Beach%20(1993)	0	0	0	0	0	1	0	0	1	0	0	0	0	0	0	0	0	0	0	6.4000001	629	1993	A group of women of Indian descent take a trip together from their home in Birmingham, England to the beach resort of Blackpool...	img_1475.jpg
-1477	Nightwatch	http://us.imdb.com/M/title-exact?Nightwatch%20(1997)	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	1	0	0	6.19999981	631	1997	Ewan McGregor plays a law student who takes a job as a night watchman at a morgue. He begins to discover clues that implicate him as the suspect of a serial of murders.	img_1477.jpg
 1480	Herbie Rides Again	http://us.imdb.com/M/title-exact?Herbie%20Rides%20Again%20(1974)	0	0	1	0	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	5.4000001	100	1974	The living Volkswagen Beetle helps an old lady protect her home from a corrupt developer.	img_1480.jpg
 1486	Girl in the Cadillac	http://us.imdb.com/M/title-exact?Girl%20in%20the%20Cadillac%20(1995)	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	4.9000001	634	1995	A runaway meets up with a young man in the bus station who leads her to a rendezvous with two others who are planning a bank robbery...	img_1486.jpg
 1488	Germinal	http://us.imdb.com/M/title-exact?Germinal%20(1993)	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	6.9000001	111	1993	It&#x27;s mid 19th century in northern France. The story is about a coal miner&#x27;s town. The workers are exploited by the mine&#x27;s owner. One day, they decide to go on strike, and the authorities repress them.	img_1488.jpg
@@ -6940,8 +6922,14 @@ COPY films (filmid, title, imdb, unknown, action, adventure, animation, children
 1673	Mirage	http://us.imdb.com/M/title-exact?Mirage%20(1995)	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	5.4000001	703	1995	Matteo Juarez is a retired detective hired by a local businessman to follow his wife Jennifer. She has a split personality and seems to be putting herself in danger without knowing it.	img_1673.jpg
 1677	Sweet Nothing	http://us.imdb.com/M/title-exact?Sweet%20Nothing%20(1995)	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	5.80000019	705	1995	Angel celebrates the birth of his daughter by taking his first hit of crack cocaine. With the hesitant support of his wife...	img_1677.jpg
 1679	B. Monkey	http://us.imdb.com/M/title-exact?B%2E+Monkey+(1998)	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	1	0	0	5.9000001	706	1998	Alan Furnace is a young man with the perfectly proper, quiet life of a London school teacher. But beneath all of that decency lies a burning desire for excitement and he just found it...	img_1679.jpg
-1680	Sliding Doors	http://us.imdb.com/Title?Sliding+Doors+(1998)	0	0	0	0	0	0	0	0	1	0	0	0	0	0	1	0	0	0	0	6.69999981	610	1998	A London woman&#x27;s love life and career both hinge, unknown to her, on whether or not she catches a train. We see it both ways, in parallel.	img_1680.jpg
 \.
+
+
+--
+-- Name: films_filmid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('films_filmid_seq', 1695, true);
 
 
 --
@@ -8273,6 +8261,12 @@ COPY writers (idwriter, name) FROM stdin;
 1283	Pier Paolo Pasolini
 1284	Lee Drysdale
 1285	Chloe King
+1286	writer4
+1287	writer5
+1288	writer6
+1310	writer1
+1311	writer2
+1312	writer3
 \.
 
 
@@ -8280,7 +8274,7 @@ COPY writers (idwriter, name) FROM stdin;
 -- Name: writers_idwriter_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('writers_idwriter_seq', 1285, true);
+SELECT pg_catalog.setval('writers_idwriter_seq', 1312, true);
 
 
 --
@@ -8563,7 +8557,6 @@ COPY writersfilm (idwriter, idfilm) FROM stdin;
 240	239
 241	244
 13	244
-242	246
 243	247
 244	247
 245	248
@@ -8584,8 +8577,6 @@ COPY writersfilm (idwriter, idfilm) FROM stdin;
 259	263
 260	264
 261	264
-262	266
-263	266
 242	268
 264	270
 265	271
@@ -8618,7 +8609,6 @@ COPY writersfilm (idwriter, idfilm) FROM stdin;
 289	293
 290	294
 291	294
-292	297
 293	298
 294	298
 295	299
@@ -8649,7 +8639,6 @@ COPY writersfilm (idwriter, idfilm) FROM stdin;
 317	326
 318	327
 299	328
-319	329
 320	332
 319	332
 321	334
@@ -8822,8 +8811,6 @@ COPY writersfilm (idwriter, idfilm) FROM stdin;
 449	497
 450	499
 451	499
-300	500
-301	500
 452	501
 453	501
 26	502
@@ -8995,8 +8982,6 @@ COPY writersfilm (idwriter, idfilm) FROM stdin;
 588	667
 116	669
 117	669
-511	670
-512	670
 589	671
 590	671
 492	672
@@ -9214,11 +9199,7 @@ COPY writersfilm (idwriter, idfilm) FROM stdin;
 753	873
 280	874
 754	875
-755	876
-756	876
 757	877
-758	878
-759	878
 760	880
 755	881
 756	881
@@ -9474,8 +9455,6 @@ COPY writersfilm (idwriter, idfilm) FROM stdin;
 958	1170
 959	1173
 960	1174
-961	1175
-962	1175
 963	1177
 964	1179
 965	1179
@@ -9534,8 +9513,6 @@ COPY writersfilm (idwriter, idfilm) FROM stdin;
 1004	1231
 1005	1233
 1006	1233
-1007	1234
-1008	1234
 1009	1239
 1010	1239
 1011	1244
@@ -9728,7 +9705,6 @@ COPY writersfilm (idwriter, idfilm) FROM stdin;
 1165	1475
 1166	1476
 1167	1476
-1168	1477
 701	1478
 702	1478
 388	1480
@@ -9876,8 +9852,21 @@ COPY writersfilm (idwriter, idfilm) FROM stdin;
 1284	1677
 634	1679
 1285	1679
-1131	1680
+1286	1682
+1287	1682
+1288	1682
+1310	1693
+1311	1693
+1312	1693
 \.
+
+
+--
+-- Name: actor_name_unique; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY actors
+    ADD CONSTRAINT actor_name_unique UNIQUE (name);
 
 
 --
@@ -9897,6 +9886,14 @@ ALTER TABLE ONLY actorsfilm
 
 
 --
+-- Name: directors_name_unique; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY directors
+    ADD CONSTRAINT directors_name_unique UNIQUE (name);
+
+
+--
 -- Name: directors_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
@@ -9910,6 +9907,14 @@ ALTER TABLE ONLY directors
 
 ALTER TABLE ONLY films
     ADD CONSTRAINT films_pkey PRIMARY KEY (filmid);
+
+
+--
+-- Name: films_titleyear_unique; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY films
+    ADD CONSTRAINT films_titleyear_unique UNIQUE (title, year);
 
 
 --
@@ -9985,11 +9990,27 @@ ALTER TABLE ONLY loja
 
 
 --
+-- Name: unique_apelido; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY usuario
+    ADD CONSTRAINT unique_apelido UNIQUE (us_apelido);
+
+
+--
 -- Name: unique_usuario; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY usuario
     ADD CONSTRAINT unique_usuario UNIQUE (us_codigo, us_cpf);
+
+
+--
+-- Name: writers_name_unique; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY writers
+    ADD CONSTRAINT writers_name_unique UNIQUE (name);
 
 
 --
@@ -10009,6 +10030,42 @@ ALTER TABLE ONLY writersfilm
 
 
 --
+-- Name: index_apelido; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_apelido ON usuario USING btree (us_apelido);
+
+
+--
+-- Name: index_codigo; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_codigo ON amizade USING btree (am_codigo);
+
+
+--
+-- Name: index_id; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_id ON usuario USING btree (us_codigo);
+
+
+--
+-- Name: index_usuarioAmigo; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE UNIQUE INDEX "index_usuarioAmigo" ON amizade USING btree (am_usuario, am_amigo);
+
+
+--
+-- Name: fk_actorid; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY actorsfilm
+    ADD CONSTRAINT fk_actorid FOREIGN KEY (idactor) REFERENCES actors(idactor);
+
+
+--
 -- Name: fk_amizade_amigo; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -10022,6 +10079,38 @@ ALTER TABLE ONLY amizade
 
 ALTER TABLE ONLY amizade
     ADD CONSTRAINT fk_amizade_usuario FOREIGN KEY (am_usuario) REFERENCES usuario(us_codigo) ON DELETE CASCADE;
+
+
+--
+-- Name: fk_directorid; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY films
+    ADD CONSTRAINT fk_directorid FOREIGN KEY (director) REFERENCES directors(iddirector);
+
+
+--
+-- Name: fk_filmid; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY actorsfilm
+    ADD CONSTRAINT fk_filmid FOREIGN KEY (idfilm) REFERENCES films(filmid);
+
+
+--
+-- Name: fk_filmid; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY writersfilm
+    ADD CONSTRAINT fk_filmid FOREIGN KEY (idfilm) REFERENCES films(filmid);
+
+
+--
+-- Name: fk_writerid; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY writersfilm
+    ADD CONSTRAINT fk_writerid FOREIGN KEY (idwriter) REFERENCES writers(idwriter);
 
 
 --

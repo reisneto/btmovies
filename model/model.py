@@ -8,9 +8,23 @@ except:
 
 class Film:
 	pass
+	
+class Director:
+	pass
+	
+class Actor:
+	pass
 
+class Writer:
+	pass
 
-############################## UTILS - Mount Film
+class Usuario:
+	pass
+	
+class Amizade:
+	pass
+
+############################## UTILS - Mount Films
 def mountFilms(films):
 	ret = []
 	idFilm = -1
@@ -57,8 +71,62 @@ def mountFilms(films):
 	if idFilm != -1:
 		ret.append(mounted)
 	return ret
-		
 	
+############################## UTILS - Mount Directors
+def mountDirectors(directors):
+	ret = []
+	for director in directors:
+		mounted = Director()
+		mounted.idDirector = director[0]
+		mounted.name = director[1]
+		ret.append(mounted)
+	return ret
+		
+############################## UTILS - Mount Actors
+def mountActors(actors):
+	ret = []
+	for actor in actors:
+		mounted = Actor()
+		mounted.idActor = actor[0]
+		mounted.name = actor[1]
+		ret.append(mounted)
+	return ret
+
+############################## UTILS - Mount Writers
+def mountWriters(writers):
+	ret = []
+	for writer in writers:
+		mounted = Writer()
+		mounted.idWriter = writer[0]
+		mounted.name = writer[1]
+		ret.append(mounted)
+	return ret
+
+############################## UTILS - Mount Usuarios --> us_codigo, us_nome, us_cpf, us_email, us_apelido, us_senha
+def mountUsuarios(usuarios):
+	ret = []
+	for usuario in usuarios:
+		mounted = Usuario()
+		mounted.us_codigo = usuario[0]
+		mounted.us_nome = usuario[1]
+		mounted.us_cpf = usuario[2]
+		mounted.us_email = usuario[3]
+		mounted.us_apelido = usuario[4]
+		mounted.us_senha = usuario[5]
+		ret.append(mounted)
+	return ret
+	
+############################## UTILS - Mount Amizades
+def mountAmizades(amizades): 
+	ret = []
+	for amizade in amizades:
+		mounted = Amizade()
+		mounted.am_codigo = amizade[0]
+		mounted.am_usuario = amizade[1]
+		mounted.am_amigo = amizade[2]
+		mounted.am_confianca = amizade[3]
+		ret.append(mounted)
+	return ret
 
 ############################## INSERT - Director	
 def insertDirector(name):
@@ -149,7 +217,34 @@ def insertFilm(title, imdb, unknown, action, adventure, animation, children, com
 	return idFilm
 
 ############################## INSERT - Usuario
+def insertUsuario(nome, cpf, email, apelido, senha):
+	ordem = conexao.cursor()
+	try: 
+		ordem.execute('INSERT INTO usuario(us_nome, us_cpf, us_email, us_apelido, us_senha) VALUES (%s, %s, %s, %s, %s);', [nome, cpf, email, apelido, senha])
+	except Exception, e:
+		print e
+		ordem.close()
+		return None
+	conexao.commit()
+	ordem.execute('SELECT us_codigo FROM usuario WHERE us_apelido = %s', [apelido])
+	idUsuario = ordem.fetchone()
+	ordem.close()
+	return idUsuario
 
+############################## INSERT - Amizade
+def insertAmizade(usuario, amigo, confianca):
+	ordem = conexao.cursor()
+	try: 
+		ordem.execute('INSERT INTO amizade(am_usuario, am_amigo, am_confianca) VALUES (?, ?, ?);', [usuario, amigo, confianca])
+	except Exception, e:
+		print e
+		ordem.close()
+		return None
+	conexao.commit()
+	ordem.execute('SELECT am_codigo FROM amizade WHERE am_usuario = %s and am_amigo = %s', [usuario, amigo])
+	idAmizade = ordem.fetchone()
+	ordem.close()
+	return idAmizade
 
 ############################## SELECT - Film
 def selectFilm(idFilm):
@@ -178,7 +273,108 @@ def selectFilmsWhere(whereStmt):
 	ordem.close()
 	return films
 
+############################## SELECT - Directors
+def selectDirectors():
+	ordem = conexao.cursor()
+	ordem.execute('SELECT iddirector, name FROM directors;')
+	auxDirectors = ordem.fetchall()
+	directors = mountDirectors(auxDirectors)
+	ordem.close()
+	return directors
 
+############################## SELECT - Director
+def selectDirector(idDirector):
+	ordem = conexao.cursor()
+	ordem.execute('SELECT iddirector, name FROM directors WHERE iddirector = %s;', [idDirector])
+	auxDirectors = ordem.fetchall()
+	directors = mountDirectors(auxDirectors)
+	ordem.close()
+	return directors
+	
+############################## SELECT - Actors
+def selectActors():
+	ordem = conexao.cursor()
+	ordem.execute('SELECT idactor, name FROM actors;')
+	auxActors = ordem.fetchall()
+	actors = mountActors(auxActors)
+	ordem.close()
+	return actors
+
+############################## SELECT - Actor
+def selectActor(idActor):
+	ordem = conexao.cursor()
+	ordem.execute('SELECT idactor, name FROM actors WHERE idactor = %s;', [idActor])
+	auxActors = ordem.fetchall()
+	actors = mountActors(auxActors)
+	ordem.close()
+	return actors
+
+############################## SELECT - Writers
+def selectWriters():
+	ordem = conexao.cursor()
+	ordem.execute('SELECT idwriter, name FROM writers;')
+	auxWriters = ordem.fetchall()
+	writers = mountWriters(auxWriters)
+	ordem.close()
+	return writers
+
+############################## SELECT - Writer
+def selectWriter(idWriter):
+	ordem = conexao.cursor()
+	ordem.execute('SELECT idwriter, name FROM writers WHERE idwriter = %s;', [idWriter])
+	auxWriters = ordem.fetchall()
+	writers = mountWriters(auxWriters)
+	ordem.close()
+	return writers
+
+############################## SELECT - Usuario by id
+def selectUsuarioId(idUsuario):
+	ordem = conexao.cursor()
+	ordem.execute('SELECT * FROM usuario WHERE us_codigo = %s;', [idUsuario])
+	auxUsuarios = ordem.fetchall()
+	usuarios = mountUsuarios(auxUsuarios)
+	ordem.close()
+	return usuarios
+
+############################## SELECT - Usuario by apelido
+def selectUsuarioApelido(apelido):
+	ordem = conexao.cursor()
+	ordem.execute('SELECT * FROM usuario WHERE us_apelido = %s;', [apelido])
+	auxUsuarios = ordem.fetchall()
+	usuarios = mountUsuarios(auxUsuarios)
+	ordem.close()
+	return usuarios
+
+############################## SELECT - Usuario - Login
+def selectUsuarioLogin(apelido, senha):
+	ordem = conexao.cursor()
+	ordem.execute('SELECT * FROM usuario WHERE us_apelido = %s and us_senha = %s;', [apelido, senha])
+	auxUsuarios = ordem.fetchall()
+	usuarios = mountUsuarios(auxUsuarios)
+	ordem.close()
+	return usuarios
+
+############################## SELECT - Amizade by id
+def selectAmizadeId(idAmizade):
+	ordem = conexao.cursor()
+	ordem.execute('SELECT am_codigo, am_usuario, am_amigo, am_confianca FROM amizade WHERE am_codigo = %s;', [idAmizade])
+	auxAmizades = ordem.fetchall()
+	amizades = mountAmizades(auxAmizades)
+	ordem.close()
+	return amizades
+
+############################## SELECT - Amizade by usuario e amigo
+def selectAmizadeId(usuario_id, amigo_id):
+	ordem = conexao.cursor()
+	ordem.execute('SELECT am_codigo, am_usuario, am_amigo, am_confianca FROM amizade WHERE am_usuario = %s and am_amigo = %s;', [usuario_id, amigo_id])
+	auxAmizades = ordem.fetchall()
+	amizades = mountAmizades(auxAmizades)
+	ordem.close()
+	return amizades
+
+############################## RECOMENDAÇÃO
+def recomendacaoUsuario(idUsuario):
+	return None
 
 
 ############################## Cadastro Film Test
@@ -186,10 +382,9 @@ def selectFilmsWhere(whereStmt):
 #writers = ['writer1', 'writer2', 'writer3']
 #insertFilm('film1', 'film1.com', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', 9.0, 'director1', 2012, 'sinopse1', 'image_1.jpg', actors, writers)
 
-filmes = selectFilms()
-print len(filmes)
+filmes = selectUsuarioLogin("teste", "senha")
 for filme in filmes:
-	print filme.title
+	print filme.name
 
 conexao.close()
 

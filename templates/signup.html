@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row-fluid">
+		<div class="span2"></div>
+		<div class="span4">
+			<p> Entre para a maior comunidade de Cinéfilos que o mundo jamais viu e Seja um Big Tigger! </p>
+			<img src="/static/mgmfilms.jpg"/>
+		</div>
+
+		<div class="span4">
+			<form class="well" name="frm_login" method="POST" action="/signup">
+				<label>Nome:</label> <input placeholder="Seu nome aqui" name="name" type="text" />
+				<label>Apelido:</label> <input name="nick" type="text" />
+				<label>cpf:</label> <input name="cpf" type="text" />
+				<label>Email:</label> <input name="email" type="text" />
+				<label>Password:</label> <input name="pwd" type="password"/>
+				<label>
+						<input type="submit" class="btn" value="Enviar" />
+				</label>
+			</form>
+		<div class="span2"></div>
+</div>
+{% endblock content %}

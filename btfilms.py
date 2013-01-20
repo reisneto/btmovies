@@ -17,6 +17,7 @@ urls = (
 	'/signup','Signup',
 	'/.json','JsonFilms',
 	'/about','About',
+	'/alterar','Alterar',
 	'/.*','Index',
 )
 
@@ -49,6 +50,10 @@ class Logged:
 class About:
 	def GET(self):
 		return render.about()
+
+class Alterar:
+	def GET(self):
+		return render.alterar()
 
 def logged():
 	if session.login==1:

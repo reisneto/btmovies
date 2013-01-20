@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row-fluid">
+		<div class="span3"></div>
+		
+
+		<div class="span6">
+			    <h2>Perfil Usuário</h2>
+			<form class="well" name="frm_alt" style="min-height: 410px;">
+				<div class="span6"> 
+					  <label>Nome:</label> <input placeholder="Digite seu nome aqui" name="name" type="text" />
+					  <label>Apelido:</label> <input  placeholder="Digite seu apelido aqui" name="nick" type="text" />
+					  <label>Cpf:</label> <input placeholder="Digite seu cpf aqui" name="cpf" type="text" />
+					  <label>Email:</label> <input placeholder="Digite seu email aqui" name="email" type="text" />
+					  <label>Nova Senha:</label> <input placeholder="Digite sua nova senha aqui" name="pwd" type="password"/>
+					  <label>Confimar Senha:</label> <input placeholder="Digite sua nova senha novamente" name="pwd" type="password"/>
+					  <label>
+							  <input type="submit" class="btn" value="Alterar" />
+					  </label>
+				</div> 
+				<div class="span3"> 
+					  <label style="padding-bottom: 15px;" ><input name="unknown" type="checkbox" /> Unknown</label>
+					  <label style="padding-bottom: 15px;"><input name="action" type="checkbox" /> Action</label> 
+					  <label style="padding-bottom: 15px;"><input name="adventure" type="checkbox" /> Adventure</label> 
+					  <label style="padding-bottom: 15px;"><input name="animation" type="checkbox" /> Animation</label> 
+					  <label style="padding-bottom: 15px;"><input name="children" type="checkbox" /> Children</label> 
+					  <label style="padding-bottom: 15px;"><input name="comedy" type="checkbox" /> Comedy</label> 
+					  <label style="padding-bottom: 15px;"><input name="crime" type="checkbox" /> Crime</label> 
+					  <label style="padding-bottom: 15px;"><input name="documentary" type="checkbox" /> Documentary</label>
+					  <label style="padding-bottom: 15px;"><input name="drama" type="checkbox" /> Drama</label> 
+					  <label style="padding-bottom: 15px;"><input name="fantasy" type="checkbox" /> Fantasy</label>
+				</div>
+				<div class="span3">
+					  
+					  <label style="padding-bottom: 15px;"><input name="filmnoir" type="checkbox" /> Filmnoir</label> 
+					  <label style="padding-bottom: 15px;"><input name="horror" type="checkbox" /> Horror</label> 
+					  <label style="padding-bottom: 15px;"><input name="musical" type="checkbox" /> Musical</label> 
+					  <label style="padding-bottom: 15px;"><input name="mistery" type="checkbox" /> Mistery</label> 
+					  <label style="padding-bottom: 15px;"><input name="romance" type="checkbox" /> Romance</label> 
+					  <label style="padding-bottom: 15px;"><input name="scifi" type="checkbox" /> Scifi</label> 
+					  <label style="padding-bottom: 15px;"><input name="thriller" type="checkbox" /> Thriller</label> 
+					  <label style="padding-bottom: 15px;"><input name="war" type="checkbox" /> War</label> 
+					  <label style="padding-bottom: 15px;"><input name="western" type="checkbox" /> Western</label> 
+					  
+			        </div> 
+			</form>
+		
+</div>
+{% endblock content %}
+

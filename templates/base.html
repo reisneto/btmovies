@@ -43,8 +43,8 @@
 					<p class="navbar-text pull-right"><a href="/signup">Cadastro</a> | <a href="/login">Login</a></p>
 				{% endif%}
 			{% endblock auth_area %}
-			<form class="navbar-search pull-center" >
-					<input type="text" class="search-query" placeholder="Encontre amigos"/> 
+			<form class="navbar-search pull-center" method="get" action="/amigos" >
+					<input type="text" name="nome" class="search-query" placeholder="Encontre amigos"/> 
 					<span class="search-icon js-search-action">
 		              <button type="submit" class="nav-search btn" tabindex="-1">
 							  <i class="icon-search"></i>

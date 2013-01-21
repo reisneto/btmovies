@@ -3,7 +3,7 @@
 		<div class="span{{ span_num }}">
 			{% block query_area %}
 				<!-- <div class="leaderboard"> 
-						<div style="text-align:center">-->
+						<div style="text-align:center">
 			<div class="row-fluid">
 				<div class="offset3 span7">
 					<form class="well form-inline" name="frm_search" method="get" action="#">
@@ -25,7 +25,7 @@
 			</div>
 			</div>
 				
-<!--		</div>		  	-->
+		</div>		  	-->
 			{% endblock query_area %}
 			
 		   
@@ -33,27 +33,36 @@
 			  <div class="span12">
 				  <ul class="nav nav-tabs">
 					  <li class="active"> <a href="#">Usuários</a></li>
-					<!--  {% if logged == True %}
-						  <li> <a href="#">Recomendado por amigos </a></li>
-						  <li> <a href="#">Recomendado para você </a></li>
-					  {% endif  %} -->
-			      </ul>
+		      </ul>
 				  <div class="container-fluid">
+						{% if usuarios %}	
 						  {% for usuario in usuarios %}
 							  <div class="row-fluid">
 							  		<div class="span2">
-											<img src="static/images/user.jpg" width="150" height="100" />
+											<img src="static/user_images/thundercats.jpg" width="150" height="100" />
 									</div>
-									<div class="span2">
+									<div class="span4">
 										<p> Nome: {{ usuario.us_nome }} </p>
-										<p> Email: <a href="{{ usuario.us_email }}" target="_blank"> {{ usuario.email }} </a>
+										<p> Email: {{ usuario.us_email }} </p>
+										<p> Confiança: <i class="icon-star-empty"></i> 
+											<i class="icon-star-empty"></i> 
+											<i class="icon-star-empty"></i>
+											<i class="icon-star-empty"></i>
+											<i class="icon-star-empty"></i> 
+											</p>
 									</div>
-									<!--<div class="span6">
-											<p>	Sinopse: {{ film.sinopse }}<p> 
-									</div> -->
-							  </div>
+						  </div>
 							  <hr/>
 						  {% endfor %}
+	  				  {% else %}
+						  <div class="row-fluid">
+								<div class="offset3 span6">
+									<h2> Não encontramos nenhum usuário </h2>
+									<img src="static/image/sadtiger.jpg" alt="Sad tiger" />
+								</div>
+							</div>
+					  {% endif %}
+
 				  </div>
             </div><!--/span-->
 		</div><!--/row-->

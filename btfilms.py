@@ -5,6 +5,7 @@ import web
 import hashlib
 import model
 import json
+import logging
 from web.contrib.template import render_jinja
 
 web.config.debug = False
@@ -19,6 +20,7 @@ urls = (
 	'/about','About',
 	'/alterar','Alterar',
 	'/amigos','Amigos',
+	'/search','MainSearch',
 	'/.*','Index',
 )
 
@@ -28,7 +30,6 @@ store = web.session.DiskStore(os.path.join(abspath,'sessions'))
 session = web.session.Session(app, store,
 				initializer={'login': 0, 'ident': None,'nome':None,'apelido':None})
 
-#db = web.database(dbn='postgres', db='test_auth', user='postgres', pw='123')
 db = web.database(dbn='postgres', db='rsdb2012', user='postgres', pw='123')
 
 render = render_jinja(
@@ -36,17 +37,14 @@ render = render_jinja(
         encoding = 'utf-8',                         # Encoding.
     )
 
-#render = web.template.render('templates', base='base')
 
 def index_default():
-	films = model.selectFilms()
+	films = model.selectFilms(30)
 	return render.index(films=films,logado=session.login,apelido=session.apelido)
 
 class Index:
 	def GET(self):
-		#films = db.query("SELECT title,sinopse,imdb,image FROM films LIMIT 30")
-#		films = model.selectFilms()
-#		return render.index(span_num=12,films=films,nome=session.nome,logado=session.login)
+		logging.error("Pagina Index.html")
 		return index_default()
 
 class Logged:
@@ -72,7 +70,9 @@ class Alterar:
         
 class Amigos:
 	def GET(self):
-		return render.amigos(logado=session.login, apelido=session.apelido)
+		nome = web.input().nome
+		usuarios = db.query("SELECT * FROM usuario WHERE us_nome ~* $nome OR us_apelido ~* $nome",vars={'nome':nome})
+		return render.amigos(logado=session.login, apelido=session.apelido,usuarios=usuarios)
 
 def logged():
 	if session.login==1:
@@ -84,14 +84,6 @@ class Login:
 
 	def GET(self):
 		if logged():
-#			films = model.selectFilms()
-#			user = {}
-#			user['id']=session.ident
-#			user['nome']=session.name
-#			user['logado']=session.login
-#			return render.index(logged=session.login,films=films,nome="Reis",logado=1)
-#			return Index.GET()
-#			return render.index(films=films,nome=session.nome,logado=session.login)
 			return index_default()
 		else:
 			return render.login()
@@ -105,16 +97,9 @@ class Login:
 				session.nome = ident['us_nome']
 				session.ident = ident['us_codigo']
 				session.apelido = ident['us_apelido']
-				#O mesmo que esta descrito em Index.GET(). Nao a uso pq n sei chama-la. N eh estatica
-#				films = model.selectFilms()
-#				return render.index(span_num=12,films=films,nome=session.nome,logado=session.login)
 				return index_default()
 			else:
 				session.login = 0
-				#session.name = None
-				#session.id = None
-				#session.privilege = 0
-				#render = create_render(session.privilege)
 				return render.login()
 		except Exception,e:
 			print e
@@ -136,8 +121,6 @@ class Signup:
 		pwd =hashlib.sha256("sAlT754-"+pwd1).hexdigest()
 		db.query("INSERT INTO usuario(us_nome,us_cpf,us_email,us_apelido,us_senha) VALUES($nome,$cpf,$email,$apelido,$senha)",vars={'apelido':us_apelido,'email':us_email,'senha':pwd,'cpf':us_cpf,'nome':us_nome})
 		return index_default()
-#		return Index.GET()
-#		raise web.seeother("/")
 
 class Logout:
 
@@ -146,5 +129,23 @@ class Logout:
         session.kill()
         raise web.seeother('/login')
 
+#--------------- AREA DE BUSCAS -----------------
+def render_search_qry(films):
+	return render.index(films=films,logado=session.login,apelido=session.apelido)
+
+#TODO: Linkar query com o model
+class MainSearch:	
+	def GET(self):
+#		q = '''af.name = 'Tom Hanks' '''
+		query = web.input().query
+		attbr = web.input().attbr
+		log = "Query %s Attbr:%s" % (query,attbr)
+		logging.error(log) 
+		films = model.selectFilmsWhere(3,"")
+		return render_search_qry(films)
+
+class FindFriends:
+	def GET(self):
+		pass
 if __name__ == '__main__':
 	app.run()

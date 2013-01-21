@@ -2,19 +2,17 @@
 {% block content %}
 		<div class="span12">
 			{% block query_area %}
-				<!-- <div class="leaderboard"> 
-						<div style="text-align:center">-->
 			<div class="row-fluid">
 				<div class="offset3 span7">
-					<form class="well form-inline" name="frm_search" method="get" action="#">
+					<form class="well form-inline" name="frm_search" method="get" action="/search">
 						<input type="text" name="query" placeholder="pesquise por" />
-								<select id="attbr">
-									<option> Todos </option>
-									<option> Filmes </option>
-									<option> Gênero </option>
-									<option> Ator </option>
-									<option> Diretor </option>
-									<option> Escritor </option>
+								<select id="attbr" name="attbr">
+									<option value="all"> Todos </option>
+									<option value="films"> Filmes </option>
+									<option value="genre"> Gênero </option>
+									<option value="actor"> Ator </option>
+									<option value="director"> Diretor </option>
+									<option value="writer"> Escritor </option>
 								</select>
 								<button class="btn" type="submit">
 									<i class="icon-search"></i>
@@ -30,7 +28,7 @@
 			
 		   
 		  <div class="row-fluid">
-			  <div class="span12">
+			  <div class="offset1 span10">
 				  <ul class="nav nav-tabs">
 					  <li class="active"> <a href="#">Geral</a></li>
 					  {% if logado == 1 %}
@@ -45,9 +43,9 @@
 											<img src="static/film_images/{{ film.image }}" width="150" height="100" alt="{{ film.title  }} thumb" />
 									</div>
 									<div class="span2">
-										<p> Titulo: {{ film.title }} </p>
-										<p> <a href="{{ film.imdb }}" target="_blank"> Mais Detalhes</a>
-										<p> Estrelas:
+										<p> <i class="icon-film"></i> <strong> Titulo:</strong> {{ film.title }} </p>
+										<p> <i class="icon-arrow-right"></i> <a href="{{ film.imdb }}" target="_blank"> Mais Detalhes</a>
+										<p> <i class="icon-star-empty"></i><strong> Estrelas:</strong>
 											{% for actor in film.actors %}
 												{% if loop.index < film.actors|length %}
 													{{ actor }},
@@ -55,10 +53,24 @@
 													{{ actor }}
 												{% endif %}
 											{% endfor %}
-										 </p>
+										</p>
+										<p>	<strong> Escritores:</strong>
+											{% for writer in film.writers %}
+												{% if loop.index < film.writers|length %}
+													{{ writer }},
+												{% else %}
+													{{ writer }}
+												{% endif %}
+											{% endfor %}
+	
+										</p>
+
 									</div>
 									<div class="span6">
-											<p>	Sinopse: {{ film.sinopse }}<p> 
+											<p>	{{ film.sinopse }}<p> 
+											<p><strong>Gêneros: </strong>
+											</p>
+											<p><strong>Rating:</strong> {{ film.rating }}</p>
 									</div>
 							  </div>
 							  <hr/>

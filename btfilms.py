@@ -26,7 +26,7 @@ urls = (
 app = web.application(urls, globals(),autoreload=False)
 store = web.session.DiskStore(os.path.join(abspath,'sessions'))
 session = web.session.Session(app, store,
-				initializer={'login': 0, 'ident': None,'nome':None})
+				initializer={'login': 0, 'ident': None,'nome':None,'apelido':None})
 
 #db = web.database(dbn='postgres', db='test_auth', user='postgres', pw='123')
 db = web.database(dbn='postgres', db='rsdb2012', user='postgres', pw='123')
@@ -40,7 +40,7 @@ render = render_jinja(
 
 def index_default():
 	films = model.selectFilms()
-	return render.index(films=films,nome=session.nome,logado=session.login)
+	return render.index(films=films,nome=session.nome,logado=session.login,apelido=session.apelido)
 
 class Index:
 	def GET(self):
@@ -68,7 +68,7 @@ class Alterar:
 		}]
 		perfil = "checked"
 		
-		return render.alterar(usuario = usuario, perfil = perfil)
+		return render.alterar(usuario = usuario, perfil = perfil,logado=session.login,nome=session.nome)
         
 class Amigos:
 	def GET(self):
@@ -104,6 +104,7 @@ class Login:
 				session.login = 1
 				session.nome = ident['us_nome']
 				session.ident = ident['us_codigo']
+				session.apelido = ident['us_apelido']
 				#O mesmo que esta descrito em Index.GET(). Nao a uso pq n sei chama-la. N eh estatica
 #				films = model.selectFilms()
 #				return render.index(span_num=12,films=films,nome=session.nome,logado=session.login)

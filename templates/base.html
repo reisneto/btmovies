@@ -38,7 +38,7 @@
 	  		</ul>
 			{% block auth_area %}
 				{% if logado == 1 %}
-				<p class="navbar-text pull-right">Olá, <a href="/alterar">{{ nome }}</a>| <a href="/logout">Sair</a></p> 
+				<p class="navbar-text pull-right">Olá, <a href="/alterar">{{ apelido }}</a> | <a href="/logout">Sair</a></p> 
 				{% else %}
 					<p class="navbar-text pull-right"><a href="/signup">Cadastro</a> | <a href="/login">Login</a></p>
 				{% endif%}

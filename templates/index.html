@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-		<div class="span{{ span_num }}">
+		<div class="span12">
 			{% block query_area %}
 				<!-- <div class="leaderboard"> 
 						<div style="text-align:center">-->
@@ -33,7 +33,7 @@
 			  <div class="span12">
 				  <ul class="nav nav-tabs">
 					  <li class="active"> <a href="#">Geral</a></li>
-					  {% if logged == True %}
+					  {% if logado == 1 %}
 						  <li> <a href="#">Recomendado por amigos </a></li>
 						  <li> <a href="#">Recomendado para você </a></li>
 					  {% endif  %}
@@ -46,7 +46,16 @@
 									</div>
 									<div class="span2">
 										<p> Titulo: {{ film.title }} </p>
-										<p> Link: <a href="{{ film.imdb }}" target="_blank"> Ver mais </a>
+										<p> <a href="{{ film.imdb }}" target="_blank"> Mais Detalhes</a>
+										<p> Estrelas:
+											{% for actor in film.actors %}
+												{% if loop.index < film.actors|length %}
+													{{ actor }},
+												{% else %}
+													{{ actor }}
+												{% endif %}
+											{% endfor %}
+										 </p>
 									</div>
 									<div class="span6">
 											<p>	Sinopse: {{ film.sinopse }}<p> 

@@ -3,7 +3,7 @@ abspath = os.path.dirname(__file__)
 sys.path.append(abspath)
 import web
 import hashlib
-#import model
+import model
 import json
 from web.contrib.template import render_jinja
 
@@ -25,7 +25,7 @@ urls = (
 app = web.application(urls, globals(),autoreload=False)
 store = web.session.DiskStore(os.path.join(abspath,'sessions'))
 session = web.session.Session(app, store,
-                              initializer={'login': 0, 'privilege': 0})
+				initializer={'login': 0, 'ident': None,'nome':None})
 
 #db = web.database(dbn='postgres', db='test_auth', user='postgres', pw='123')
 db = web.database(dbn='postgres', db='rsdb2012', user='postgres', pw='123')
@@ -37,19 +37,26 @@ render = render_jinja(
 
 #render = web.template.render('templates', base='base')
 
+def index_default():
+	films = model.selectFilms()
+	return render.index(films=films,nome=session.nome,logado=session.login)
+
 class Index:
 	def GET(self):
-		films = db.query("SELECT title,sinopse,imdb FROM films LIMIT 30")
-		return render.index(span_num=12,films=films,logged=False)
+		#films = db.query("SELECT title,sinopse,imdb,image FROM films LIMIT 30")
+#		films = model.selectFilms()
+#		return render.index(span_num=12,films=films,nome=session.nome,logado=session.login)
+		return index_default()
 
 class Logged:
 	def GET(self):
 #		return render.logged(span_num=9)
-		return render.login(logged=True)
+		return render.login(logged=session.login)
+		
 
 class About:
 	def GET(self):
-		return render.about()
+		return render.about(logado=session.login,nome=session.nome)
 
 class Alterar:
 	def GET(self):
@@ -65,26 +72,39 @@ class Login:
 
 	def GET(self):
 		if logged():
-#			return render.logged(span_num=9)
-			return render.index(logged=True)
+#			films = model.selectFilms()
+#			user = {}
+#			user['id']=session.ident
+#			user['nome']=session.name
+#			user['logado']=session.login
+#			return render.index(logged=session.login,films=films,nome="Reis",logado=1)
+#			return Index.GET()
+#			return render.index(films=films,nome=session.nome,logado=session.login)
+			return index_default()
 		else:
 			return render.login()
 
 	def POST(self):
 		email, passwd = web.input().email, web.input().pwd
 		try:
-			ident = db.select('usuario', where='email=$email', vars=locals())[0]
-			if hashlib.sha256("sAlT754-"+passwd).hexdigest() == ident['password']:
+			ident = db.select('usuario', where='us_email=$email', vars=locals())[0]
+			if hashlib.sha256("sAlT754-"+passwd).hexdigest() == ident['us_senha']:
 				session.login = 1
-				#return "logou!"
-				#return render.logged(span_num=9)
-				return render.index(logged=True)
+				session.nome = ident['us_nome']
+				session.ident = ident['us_codigo']
+				#O mesmo que esta descrito em Index.GET(). Nao a uso pq n sei chama-la. N eh estatica
+#				films = model.selectFilms()
+#				return render.index(span_num=12,films=films,nome=session.nome,logado=session.login)
+				return index_default()
 			else:
 				session.login = 0
+				#session.name = None
+				#session.id = None
 				#session.privilege = 0
 				#render = create_render(session.privilege)
 				return render.login()
-		except:
+		except Exception,e:
+			print e
 			session.login = 0
 			return "Login inexistente!"
 
@@ -94,12 +114,17 @@ class Signup:
 		return render.signup()
 
 	def POST(self):
-		nick = web.input().nick
-		email = web.input().email
+		us_nome = web.input().name
+		us_apelido = web.input().nick
+		us_cpf = web.input().cpf
+		us_email = web.input().email
 		pwd1 = web.input().pwd
+
 		pwd =hashlib.sha256("sAlT754-"+pwd1).hexdigest()
-		db.query("INSERT INTO usuario(nick,email,password) VALUES($n,$e,$p)",vars={'n':nick,'e':email,'p':pwd})
-		raise web.seeother("/")
+		db.query("INSERT INTO usuario(us_nome,us_cpf,us_email,us_apelido,us_senha) VALUES($nome,$cpf,$email,$apelido,$senha)",vars={'apelido':us_apelido,'email':us_email,'senha':pwd,'cpf':us_cpf,'nome':us_nome})
+		return index_default()
+#		return Index.GET()
+#		raise web.seeother("/")
 
 class Logout:
 
@@ -107,28 +132,6 @@ class Logout:
         session.login = 0
         session.kill()
         raise web.seeother('/login')
-
-class JsonFilms:
-	def createJson(self,films):
-		jFilms = [{
-			'title': f['title'],
-			'ano': f['ano'],
-			"diretor": f['diretor'],
-			"roteirista": f['roteirista'],#lista
-			"ator": f['ator'],#ator eh uma lista
-			"genero":f['genero'],#outra lista'''
-			"descricao":f['descricao'],
-			'rate':f['rate']
-		}for f in films]
-		return json.dumps(jFilms)
-
-	def GET(self):
-		atores = ["Tom Cruise","Pamela Anderson", "Roger That"]
-		rot = ["Mike Spuger","Jorge Aragonis"]
-		gen = ["Aventura", "Acao"]
-		films = [{'title':"A",'ano':1991,'diretor':"Steven SP","roteirista":rot,"genero":gen,"descricao":"DDDDDD",'rate':9.4,'ator':atores}
-				]
-		return self.createJson(films)
 
 if __name__ == '__main__':
 	app.run()

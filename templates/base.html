@@ -37,8 +37,8 @@
               <li><a href="/about">Sobre</a></li>
 	  		</ul>
 			{% block auth_area %}
-				{% if logged == True %}
-					<p class="navbar-text pull-right">Olá, <a href="#">Pekka</a></p> 
+				{% if logado == 1 %}
+				<p class="navbar-text pull-right">Olá, <a href="/alterar">{{ nome }}</a>| <a href="/logout">Sair</a></p> 
 				{% else %}
 					<p class="navbar-text pull-right"><a href="/signup">Cadastro</a> | <a href="/login">Login</a></p>
 				{% endif%}

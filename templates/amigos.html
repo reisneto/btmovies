@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block content %}
+		<div class="span{{ span_num }}">
+			{% block query_area %}
+				<!-- <div class="leaderboard"> 
+						<div style="text-align:center">-->
+			<div class="row-fluid">
+				<div class="offset3 span7">
+					<form class="well form-inline" name="frm_search" method="get" action="#">
+						<input type="text" name="query" placeholder="pesquise por" />
+								<select id="attbr">
+									<option> Todos </option>
+									<option> Filmes </option>
+									<option> Gênero </option>
+									<option> Ator </option>
+									<option> Diretor </option>
+									<option> Escritor </option>
+								</select>
+								<button class="btn" type="submit">
+									<i class="icon-search"></i>
+									Pesquisar
+								</button>
+					</form>
+				</div>
+			</div>
+			</div>
+				
+<!--		</div>		  	-->
+			{% endblock query_area %}
+			
+		   
+		  <div class="row-fluid">
+			  <div class="span12">
+				  <ul class="nav nav-tabs">
+					  <li class="active"> <a href="#">Usuários</a></li>
+					<!--  {% if logged == True %}
+						  <li> <a href="#">Recomendado por amigos </a></li>
+						  <li> <a href="#">Recomendado para você </a></li>
+					  {% endif  %} -->
+			      </ul>
+				  <div class="container-fluid">
+						  {% for usuario in usuarios %}
+							  <div class="row-fluid">
+							  		<div class="span2">
+											<img src="static/images/user.jpg" width="150" height="100" />
+									</div>
+									<div class="span2">
+										<p> Nome: {{ usuario.us_nome }} </p>
+										<p> Email: <a href="{{ usuario.us_email }}" target="_blank"> {{ usuario.email }} </a>
+									</div>
+									<!--<div class="span6">
+											<p>	Sinopse: {{ film.sinopse }}<p> 
+									</div> -->
+							  </div>
+							  <hr/>
+						  {% endfor %}
+				  </div>
+            </div><!--/span-->
+		</div><!--/row-->
+
+{% endblock content %}

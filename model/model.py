@@ -25,9 +25,10 @@ class Amizade:
 	pass
 
 ############################## UTILS - Mount Films
-def mountFilms(films):
+def mountFilms(films, top):
 	ret = []
 	idFilm = -1
+	cont = 0
 	for film in films:
 		if idFilm == film[0]:
 			mounted.writers.add(film[32])
@@ -35,9 +36,12 @@ def mountFilms(films):
 		else:
 			if idFilm != -1:
 				ret.append(mounted)
+				cont += 1
+				if cont >= top:
+					break
 			idFilm = film[0]
 			mounted = Film()
-			mounted.idfilm = idFilm
+			mounted.filmid = idFilm
 			mounted.title = film[1]
 			mounted.imdb = film[2]
 			mounted.unknown = film[3]
@@ -68,7 +72,7 @@ def mountFilms(films):
 			mounted.writers = set()
 			mounted.writers.add(film[32])
 			mounted.actors.add(film[36])
-	if idFilm != -1:
+	if idFilm != -1 and cont < top:
 		ret.append(mounted)
 	return ret
 	
@@ -251,25 +255,25 @@ def selectFilm(idFilm):
 	ordem = conexao.cursor()
 	ordem.execute('SELECT * FROM films AS f INNER JOIN directors d ON d.iddirector = f.director INNER JOIN writersfilm wf ON wf.idfilm = f.filmid INNER JOIN writers w ON w.idwriter = wf.idwriter INNER JOIN actorsfilm af ON af.idfilm = f.filmid INNER JOIN actors a ON a.idactor = af.idactor WHERE filmid = %s ORDER BY filmid', [idFilm])
 	auxFilm = ordem.fetchall()
-	film = mountFilms(auxFilm)
+	film = mountFilms(auxFilm, 2)
 	ordem.close()
 	return film
 	
 ############################## SELECT - Films
-def selectFilms():
+def selectFilms(top):
 	ordem = conexao.cursor()
 	ordem.execute('SELECT * FROM films AS f INNER JOIN directors d ON d.iddirector = f.director INNER JOIN writersfilm wf ON wf.idfilm = f.filmid INNER JOIN writers w ON w.idwriter = wf.idwriter INNER JOIN actorsfilm af ON af.idfilm = f.filmid INNER JOIN actors a ON a.idactor = af.idactor ORDER BY filmid')
 	auxFilms = ordem.fetchall()
-	films = mountFilms(auxFilms)
+	films = mountFilms(auxFilms, top)
 	ordem.close()
 	return films
 	
 ############################## SELECT - Films with whereStmt
-def selectFilmsWhere(whereStmt):
+def selectFilmsWhere(top, whereStmt):
 	ordem = conexao.cursor()
 	ordem.execute('SELECT * FROM films AS f INNER JOIN directors d ON d.iddirector = f.director INNER JOIN writersfilm wf ON wf.idfilm = f.filmid INNER JOIN writers w ON w.idwriter = wf.idwriter INNER JOIN actorsfilm af ON af.idfilm = f.filmid INNER JOIN actors a ON a.idactor = af.idactor' + whereStmt + ' ORDER BY filmid')
 	auxFilms = ordem.fetchall()
-	films = mountFilms(auxFilms)
+	films = mountFilms(auxFilms, top)
 	ordem.close()
 	return films
 
@@ -372,23 +376,33 @@ def selectAmizadeId(usuario_id, amigo_id):
 	ordem.close()
 	return amizades
 
-############################## RECOMENDACAO
-def recomendacaoUsuario(idUsuario):
+############################## RECOMENDACAO by Perfil
+def recomendacaoUsuario(idUsuario, top):
 	ordem = conexao.cursor()
 	ordem.execute('SELECT f.*, d.*, wf.*, w.*, af.*, a.*, SQRT(POW(CAST(f.unknown AS INTEGER) - CAST(p.unknown AS INTEGER),2) + POW(CAST(f.action AS INTEGER) - CAST(p.action AS INTEGER),2) + POW(CAST(f.adventure AS INTEGER) - CAST(p.adventure AS INTEGER),2) + POW(CAST(f.animation AS INTEGER) - CAST(p.animation AS INTEGER),2) + POW(CAST(f.children AS INTEGER) - CAST(p.children AS INTEGER),2) + POW(CAST(f.comedy AS INTEGER) - CAST(p.comedy AS INTEGER),2) + POW(CAST(f.crime AS INTEGER) - CAST(p.crime AS INTEGER),2) + POW(CAST(f.documentary AS INTEGER) - CAST(p.documentary AS INTEGER),2) + POW(CAST(f.drama AS INTEGER) - CAST(p.drama AS INTEGER),2) + POW(CAST(f.fantasy AS INTEGER) - CAST(p.fantasy AS INTEGER),2) + POW(CAST(f.filmnoir AS INTEGER) - CAST(p.filmnoir AS INTEGER),2) + POW(CAST(f.horror AS INTEGER) - CAST(p.horror AS INTEGER),2) + POW(CAST(f.musical AS INTEGER) - CAST(p.musical AS INTEGER),2) + POW(CAST(f.mystery AS INTEGER) - CAST(p.mystery AS INTEGER),2) + POW(CAST(f.romance AS INTEGER) - CAST(p.romance AS INTEGER),2) + POW(CAST(f.scifi AS INTEGER) - CAST(p.scifi AS INTEGER),2) + POW(CAST(f.thriller AS INTEGER) - CAST(p.thriller AS INTEGER),2) + POW(CAST(f.war AS INTEGER) - CAST(p.war AS INTEGER),2) + POW(CAST(f.western AS INTEGER) - CAST(p.western AS INTEGER),2)) as distEuc FROM film_perfils p, films f INNER JOIN directors d ON d.iddirector = f.director INNER JOIN writersfilm wf ON wf.idfilm = f.filmid INNER JOIN writers w ON w.idwriter = wf.idwriter INNER JOIN actorsfilm af ON af.idfilm = f.filmid INNER JOIN actors a ON a.idactor = af.idactor WHERE p.idUsuario = %s ORDER BY distEuc, title ASC', [idUsuario])
 	auxFilms = ordem.fetchall()
-	films = mountFilms(auxFilms)
+	films = mountFilms(auxFilms, top)
+	ordem.close()
+	return films
+	
+############################## RECOMENDACAO by Friends
+def recomendacaoUsuarioFromFriends(idUsuario, top):
+	ordem = conexao.cursor()
+	ordem.execute('SELECT f.*, d.*, wf.*, w.*, af.*, ac.*, AVG(a.am_confianca) AS trust FROM amizade a INNER JOIN recommendationsFromFriends r ON a.am_amigo = r.idUsuario INNER JOIN films f ON f.filmid = r.idFilm INNER JOIN directors d ON d.iddirector = f.director  INNER JOIN writersfilm wf ON wf.idfilm = f.filmid INNER JOIN writers w ON w.idwriter = wf.idwriter INNER JOIN actorsfilm af ON af.idfilm = f.filmid INNER JOIN actors ac ON ac.idactor = af.idactor WHERE a.am_usuario = %s AND a.am_usuario NOT IN (SELECT re.idUsuario FROM recommendationsFromFriends AS re WHERE re.idUsuario = a.am_usuario AND re.idFilm = f.filmid) GROUP BY f.title, f.filmid, d.iddirector, wf.idwriter, wf.idfilm, w.idwriter, af.idfilm, af.idactor, ac.idactor ORDER BY trust DESC, title', [idUsuario])
+	auxFilms = ordem.fetchall()
+	films = mountFilms(auxFilms, top)
 	ordem.close()
 	return films
 
+
 ############################## Cadastro Film Test
-#actors = ['actor1', 'actor2', 'actor3']
+#\actors = ['actor1', 'actor2', 'actor3']
 #writers = ['writer1', 'writer2', 'writer3']
 #insertFilm('film1', 'film1.com', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', 9.0, 'director1', 2012, 'sinopse1', 'image_1.jpg', actors, writers)
 
-filmes = recomendacaoUsuario(1)
-for filme in filmes:
-	print filme.title
+#filmes = recomendacaoUsuarioFromFriends(2, 10)
+#for filme in filmes:
+#	print filme.filmid
 
-conexao.close()
+#conexao.close()
 

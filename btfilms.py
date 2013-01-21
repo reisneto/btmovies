@@ -18,6 +18,7 @@ urls = (
 	'/.json','JsonFilms',
 	'/about','About',
 	'/alterar','Alterar',
+	'/amigos','Amigos',
 	'/.*','Index',
 )
 
@@ -60,7 +61,18 @@ class About:
 
 class Alterar:
 	def GET(self):
-		return render.alterar()
+		
+		usuario = [{
+			'nome': ['nome']
+			
+		}]
+		perfil = "checked"
+		
+		return render.alterar(usuario = usuario, perfil = perfil)
+        
+class Amigos:
+	def GET(self):
+		return render.amigos()
 
 def logged():
 	if session.login==1:

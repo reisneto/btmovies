@@ -40,7 +40,7 @@ render = render_jinja(
 
 def index_default():
 	films = model.selectFilms()
-	return render.index(films=films,nome=session.nome,logado=session.login,apelido=session.apelido)
+	return render.index(films=films,logado=session.login,apelido=session.apelido)
 
 class Index:
 	def GET(self):
@@ -57,7 +57,7 @@ class Logged:
 
 class About:
 	def GET(self):
-		return render.about(logado=session.login,nome=session.nome)
+		return render.about(logado=session.login,apelido=session.apelido)
 
 class Alterar:
 	def GET(self):
@@ -68,11 +68,11 @@ class Alterar:
 		}]
 		perfil = "checked"
 		
-		return render.alterar(usuario = usuario, perfil = perfil,logado=session.login,nome=session.nome)
+		return render.alterar(usuario = usuario, perfil = perfil,logado=session.login,nome=session.nome,apelido=session.apelido)
         
 class Amigos:
 	def GET(self):
-		return render.amigos()
+		return render.amigos(logado=session.login, apelido=session.apelido)
 
 def logged():
 	if session.login==1:

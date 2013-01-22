@@ -28,9 +28,12 @@ urls = (
 
 
 app = web.application(urls, globals(),autoreload=False)
-store = web.session.DiskStore(os.path.join(abspath,'sessions'))
-session = web.session.Session(app, store,
-				initializer={'login': 0, 'ident': None,'nome':None,'apelido':None,'email':None})
+if web.config.get('_session') is None:
+	store = web.session.DiskStore(os.path.join(abspath,'sessions'))
+	session = web.session.Session(app, store,initializer={'login': 0, 'ident': None,'nome':None,'apelido':None,'email':None})
+	web.config._session = session
+else:
+	session = web.config._session
 
 application = app.wsgifunc()
 db = web.database(dbn='postgres', db='rsdb2012', user='postgres', pw='123')

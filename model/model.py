@@ -248,7 +248,7 @@ def insertUsuario(nome, cpf, email, apelido, senha):
 def insertAmizade(usuario, amigo, confianca):
 	ordem = conexao.cursor()
 	try: 
-		ordem.execute('INSERT INTO amizade(am_usuario, am_amigo, am_confianca) VALUES (?, ?, ?);', [usuario, amigo, confianca])
+		ordem.execute('INSERT INTO amizade(am_usuario, am_amigo, am_confianca) VALUES (%s, %s, %s);', [usuario, amigo, confianca])
 	except Exception, e:
 		print e
 		ordem.close()
@@ -258,6 +258,16 @@ def insertAmizade(usuario, amigo, confianca):
 	idAmizade = ordem.fetchone()
 	ordem.close()
 	return idAmizade
+	
+############################## INSERT - RecommendationsFromFriends
+def insertAmizade(idUsuario, idFilm):
+	ordem = conexao.cursor()
+	try: 
+		ordem.execute('INSERT INTO recommendationsfromfriends(idusuario, idfilm) VALUES (%s, %s);', [idUsuario, idFilm])
+	except Exception, e:
+		print e
+	conexao.commit()
+	return None
 
 ############################## SELECT - Film
 def selectFilm(idFilm):
@@ -384,6 +394,15 @@ def selectAmizadeId(usuario_id, amigo_id):
 	amizades = mountAmizades(auxAmizades)
 	ordem.close()
 	return amizades
+	
+############################## SELECT - Retorna os filmes que o usuario recomendou
+def selectRecommendationsFromFriends(usuario_id, top):
+	ordem = conexao.cursor()
+	ordem.execute('SELECT * FROM films AS f INNER JOIN directors d ON d.iddirector = f.director INNER JOIN writersfilm wf ON wf.idfilm = f.filmid INNER JOIN writers w ON w.idwriter = wf.idwriter INNER JOIN actorsfilm af ON af.idfilm = f.filmid INNER JOIN actors a ON a.idactor = af.idactor WHERE f.filmid IN (SELECT idfilm FROM recommendationsFromFriends r WHERE r.idUsuario = %s) ORDER BY filmid', [usuario_id])
+	auxFilms = ordem.fetchall()
+	films = mountFilms(auxFilms, top)
+	ordem.close()
+	return films
 
 ############################## RECOMENDACAO by Perfil
 def recomendacaoUsuario(idUsuario, top):
@@ -409,11 +428,10 @@ def recomendacaoUsuarioFromFriends(idUsuario, top):
 #writers = ['writer1', 'writer2', 'writer3']
 #insertFilm('film1', 'film1.com', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', 9.0, 'director1', 2012, 'sinopse1', 'image_1.jpg', actors, writers)
 
-filmes = selectFilmsWhere(10, "a.name = 'Tom Hanks'")
+filmes = selectRecommendationsFromFriends(3, 10)
 #filmes = selectFilms(10)
 for filme in filmes:
-	for actor in filme.actors:
-		print actor
+	print filme.title
 
 #conexao.close()
 

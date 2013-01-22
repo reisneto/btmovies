@@ -70,6 +70,14 @@
 									<div class="span6">
 											<p>	{{ film.sinopse }}<p> 
 											<p><strong>Gêneros: </strong>
+												{% for genre in film.genres %}
+													{% if loop.index < film.genres|length %}
+														{{ genre }},
+													{% else %}
+														{{ genre }}
+													{% endif %}
+												{% endfor %}
+
 											</p>
 											<p><strong>Rating:</strong> {{ film.rating }}</p>
 											<p> <a href="#"><i class="icon-thumbs-up"> </i> Recomendar </a> </p>

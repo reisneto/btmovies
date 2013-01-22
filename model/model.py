@@ -398,7 +398,7 @@ def selectAmizadeId(usuario_id, amigo_id):
 ############################## SELECT - Retorna os filmes que o usuario recomendou
 def selectRecommendationsFromFriends(usuario_id, top):
 	ordem = conexao.cursor()
-	ordem.execute('SELECT * FROM films AS f INNER JOIN directors d ON d.iddirector = f.director INNER JOIN writersfilm wf ON wf.idfilm = f.filmid INNER JOIN writers w ON w.idwriter = wf.idwriter INNER JOIN actorsfilm af ON af.idfilm = f.filmid INNER JOIN actors a ON a.idactor = af.idactor WHERE f.filmid IN (SELECT idfilm FROM recommendationsFromFriends r WHERE r.idUsuario = %s) ORDER BY f.rating', [usuario_id])
+	ordem.execute('SELECT * FROM films AS f INNER JOIN directors d ON d.iddirector = f.director INNER JOIN writersfilm wf ON wf.idfilm = f.filmid INNER JOIN writers w ON w.idwriter = wf.idwriter INNER JOIN actorsfilm af ON af.idfilm = f.filmid INNER JOIN actors a ON a.idactor = af.idactor WHERE f.filmid IN (SELECT idfilm FROM recommendationsFromFriends r WHERE r.idUsuario = %s) ORDER BY f.rating DESC', [usuario_id])
 	auxFilms = ordem.fetchall()
 	films = mountFilms(auxFilms, top)
 	ordem.close()

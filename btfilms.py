@@ -1,7 +1,7 @@
 import sys, os
 abspath = os.path.dirname(__file__)
 sys.path.append(abspath)
-os.chdir(abspath)
+#os.chdir(abspath)
 import web
 import hashlib
 import model
@@ -76,7 +76,7 @@ class Alterar:
 			perfil = {}
 
 		for k, v in perfil.iteritems():
-			if v:
+			if v=='1':
 				perfil[k] = 'checked'
 			else:
 				perfil[k] = ""

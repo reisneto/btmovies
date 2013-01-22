@@ -28,15 +28,19 @@
 			
 		   
 		  <div class="row-fluid">
-			  <div class="offset1 span10">
+			  <div class="tabbable offset1 span10">
 				  <ul class="nav nav-tabs">
-					  <li class="active"> <a href="#">Geral</a></li>
+					  <li class="active"> <a href="#geral" data-toggle="tab">Geral</a></li>
 					  {% if logado == 1 %}
-						  <li> <a href="#">Recomendado por amigos </a></li>
-						  <li> <a href="#">Recomendado para você </a></li>
+						  <li> <a href="#rec4friends" data-toggle="tab">Recomendado por amigos </a></li>
+						  <li> <a href="#autorec" data-toggle="tab">Recomendado para você </a></li>
 					  {% endif  %}
-			      </ul>
-				  <div class="container-fluid">
+		  		  </ul>
+				  <div class="tab-content">
+				  <div class="tab-pane" id="rec4friends"> Rec 4 Friends tab working!</div>
+				  <div class="tab-pane" id="autorec"> Auto Recommendation Tab working!</div>
+								  	  		  
+				  <div class="tab-pane active container-fluid" id="geral">
 						  {% for film in films %}
 							  <div class="row-fluid">
 							  		<div class="span2">
@@ -87,6 +91,7 @@
 							  <hr/>
 						  {% endfor %}
 				  </div>
+				  </div> <!-- tab content I think -->
             </div><!--/span-->
 		</div><!--/row-->
 

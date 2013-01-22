@@ -6,6 +6,7 @@ import hashlib
 import model
 import json
 import logging
+import time
 from web.contrib.template import render_jinja
 
 web.config.debug = False
@@ -113,9 +114,9 @@ class Login:
 				session.login = 0
 				return render.login()
 		except Exception,e:
-			print e
 			session.login = 0
-			return "Login inexistente!"
+			#return "Login inexistente!"
+			return render.login()
 
 
 class Signup:
@@ -131,7 +132,15 @@ class Signup:
 
 		pwd =hashlib.sha256("sAlT754-"+pwd1).hexdigest()
 		db.query("INSERT INTO usuario(us_nome,us_cpf,us_email,us_apelido,us_senha) VALUES($nome,$cpf,$email,$apelido,$senha)",vars={'apelido':us_apelido,'email':us_email,'senha':pwd,'cpf':us_cpf,'nome':us_nome})
-		return index_default()
+
+		usuario = db.select('usuario', where='us_email=$us_email', vars=locals())[0]
+		session.login = 1
+		session.nome = usuario['us_nome']
+		session.ident = usuario['us_codigo']
+		session.apelido = usuario['us_apelido']
+
+		return render.alterar(usuario = usuario, perfil = {},logado=session.login,nome=session.nome,apelido=session.apelido)
+		#return index_default()
 
 class Logout:
 

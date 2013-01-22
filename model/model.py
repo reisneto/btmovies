@@ -25,6 +25,9 @@ class Amizade:
 	pass
 
 ############################## UTILS - Mount Films
+
+mapGeneros = ['Unknown', 'Action', 'Adventure', 'Animation', 'Children', 'Comedy', 'Crime', 'Documentary', 'Drama', 'Fantasy', 'Filmnoir', 'Horror', 'Musical', 'Mystery', 'Romance', 'Scifi', 'Thriller', 'War', 'Western']
+
 def mountFilms(films, top):
 	ret = []
 	idFilm = -1
@@ -72,6 +75,12 @@ def mountFilms(films, top):
 			mounted.writers = set()
 			mounted.writers.add(film[32])
 			mounted.actors.add(film[36])
+			mounted.genres = []
+			i = 3
+			while i <= 21:
+				if film[i] == '1':
+					mounted.genres.append(mapGeneros[i - 3])
+				i += 1
 	if idFilm != -1 and cont < top:
 		ret.append(mounted)
 	return ret
@@ -271,7 +280,7 @@ def selectFilms(top):
 ############################## SELECT - Films with whereStmt
 def selectFilmsWhere(top, whereStmt):
 	ordem = conexao.cursor()
-	ordem.execute('SELECT * FROM films AS f INNER JOIN directors d ON d.iddirector = f.director INNER JOIN writersfilm wf ON wf.idfilm = f.filmid INNER JOIN writers w ON w.idwriter = wf.idwriter INNER JOIN actorsfilm af ON af.idfilm = f.filmid INNER JOIN actors a ON a.idactor = af.idactor' + whereStmt + ' ORDER BY filmid')
+	ordem.execute("SELECT * FROM films AS f INNER JOIN directors d ON d.iddirector = f.director INNER JOIN writersfilm wf ON wf.idfilm = f.filmid INNER JOIN writers w ON w.idwriter = wf.idwriter INNER JOIN actorsfilm af ON af.idfilm = f.filmid INNER JOIN actors a ON a.idactor = af.idactor WHERE " + whereStmt + " ORDER BY filmid")
 	auxFilms = ordem.fetchall()
 	films = mountFilms(auxFilms, top)
 	ordem.close()
@@ -400,9 +409,11 @@ def recomendacaoUsuarioFromFriends(idUsuario, top):
 #writers = ['writer1', 'writer2', 'writer3']
 #insertFilm('film1', 'film1.com', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', 9.0, 'director1', 2012, 'sinopse1', 'image_1.jpg', actors, writers)
 
-#filmes = recomendacaoUsuarioFromFriends(2, 10)
-#for filme in filmes:
-#	print filme.filmid
+filmes = selectFilmsWhere(10, "title = 'film1'")
+#filmes = selectFilms(10)
+for filme in filmes:
+	for genre in filme.genres:
+		print genre
 
 #conexao.close()
 

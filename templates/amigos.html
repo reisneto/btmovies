@@ -44,8 +44,8 @@
 									<div class="span4">
 										<p> Nome: {{ usuario.us_nome }} </p>
 										<p> Apelido: {{ usuario.us_apelido }} </p>
-										<p> Email: {{ usuario.us_email }} </p>
 										{% if logado: %}
+										<p> Email: {{ usuario.us_email }} </p>
 										<p> Confiança: <i class="icon-star-empty"></i> 
 											<i class="icon-star-empty"></i> 
 											<i class="icon-star-empty"></i>
@@ -61,6 +61,8 @@
 						  <div class="row-fluid">
 								<div class="offset3 span6">
 									<h2> Não encontramos nenhum usuário </h2>
+								</div>
+								<div class="offset4 span6">
 									<img src="static/image/sadtiger.jpg" alt="Sad tiger" />
 								</div>
 							</div>

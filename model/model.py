@@ -280,7 +280,7 @@ def selectFilms(top):
 ############################## SELECT - Films with whereStmt
 def selectFilmsWhere(top, whereStmt):
 	ordem = conexao.cursor()
-	ordem.execute("SELECT * FROM films AS f INNER JOIN directors d ON d.iddirector = f.director INNER JOIN writersfilm wf ON wf.idfilm = f.filmid INNER JOIN writers w ON w.idwriter = wf.idwriter INNER JOIN actorsfilm af ON af.idfilm = f.filmid INNER JOIN actors a ON a.idactor = af.idactor WHERE " + whereStmt + " ORDER BY filmid")
+	ordem.execute("SELECT * FROM films AS f INNER JOIN directors d ON d.iddirector = f.director INNER JOIN writersfilm wf ON wf.idfilm = f.filmid INNER JOIN writers w ON w.idwriter = wf.idwriter INNER JOIN actorsfilm af ON af.idfilm = f.filmid INNER JOIN actors a ON a.idactor = af.idactor WHERE f.filmid IN (SELECT f.filmid FROM films AS f INNER JOIN directors d ON d.iddirector = f.director INNER JOIN writersfilm wf ON wf.idfilm = f.filmid INNER JOIN writers w ON w.idwriter = wf.idwriter INNER JOIN actorsfilm af ON af.idfilm = f.filmid INNER JOIN actors a ON a.idactor = af.idactor WHERE " + whereStmt + " ORDER BY filmid) ORDER BY filmid")
 	auxFilms = ordem.fetchall()
 	films = mountFilms(auxFilms, top)
 	ordem.close()
@@ -409,11 +409,11 @@ def recomendacaoUsuarioFromFriends(idUsuario, top):
 #writers = ['writer1', 'writer2', 'writer3']
 #insertFilm('film1', 'film1.com', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', 9.0, 'director1', 2012, 'sinopse1', 'image_1.jpg', actors, writers)
 
-filmes = selectFilmsWhere(10, "title = 'film1'")
+filmes = selectFilmsWhere(10, "a.name = 'Tom Hanks'")
 #filmes = selectFilms(10)
 for filme in filmes:
-	for genre in filme.genres:
-		print genre
+	for actor in filme.actors:
+		print actor
 
 #conexao.close()
 

@@ -69,6 +69,7 @@
 									</div>
 									<div class="span6">
 											<p>	{{ film.sinopse }}<p> 
+											<p><strong> Ano: </strong> {{ film.year }} </p>
 											<p><strong>Gêneros: </strong>
 												{% for genre in film.genres %}
 													{% if loop.index < film.genres|length %}

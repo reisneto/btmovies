@@ -136,6 +136,50 @@ class Logout:
 def render_search_qry(films):
 	return render.index(films=films,logado=session.login,apelido=session.apelido)
 
+def get_genre_qry(query):
+	qry = query.lower()
+	if qry == "action":
+		q="f.action='1'"
+	elif qry == "adventure":
+		q="f.adventure='1'"
+	elif qry == "animation":
+		q="f.animation='1'"
+	elif qry == "children":
+		q="f.children='1'"
+	elif qry == "comedy":
+		q="f.comedy='1'"
+	elif qry == "crime":
+		q="f.crime='1'"
+	elif qry == "documentary":
+		q="f.documentary='1'"
+	elif qry == "drama":
+		q="f.drama='1'"
+	elif qry == "fantasy":
+		q="f.fantasy='1'"
+	elif qry == "filmnoir":
+		q="f.filmnoir='1'"
+	elif qry == "horror":
+		q="f.horror='1'"
+	elif qry == "musical":
+		q="f.musical='1'"
+	elif qry == "mystery":
+		q="f.mystery='1'"
+	elif qry == "romance":
+		q="f.romance='1'"
+	elif qry == "scifi":
+		q="f.scifi='1'"
+	elif qry == "thriller":
+		q="f.thriller='1'"
+	elif qry == "war":
+		q="f.war='1'"
+	elif qry == "western":
+		q="f.western='1'"
+	else:
+		q="1='2'" #minha primeira gambiarra no codigo =/ ass: Alvaro Reis
+	return q
+
+
+
 #TODO: Linkar query com o model
 class MainSearch:	#pra pagar meus pecados essa query de generos
 	def GET(self):
@@ -143,47 +187,14 @@ class MainSearch:	#pra pagar meus pecados essa query de generos
 #		try:
 		query = str(request['query'])		
 		attbr = str(request['attbr'])
-		q="a.name ~* '%s' OR d.name ~* '%s' OR w.name ~* '%s' OR f.title ~* '%s' " % (query,query,query,query)
 		if attbr != "" and attbr != "genre":
 			q="%s ~* '%s'" % (attbr,query)
 		elif attbr == "genre":
-			qry = query.lower()
-			if qry == "action":
-				q="f.action='1'"
-			elif qry == "adventure":
-				q="f.adventure='1'"
-			elif qry == "animation":
-				q="f.animation='1'"
-			elif qry == "children":
-				q="f.children='1'"
-			elif qry == "comedy":
-				q="f.comedy='1'"
-			elif qry == "crime":
-				q="f.crime='1'"
-			elif qry == "documentary":
-				q="f.documentary='1'"
-			elif qry == "drama":
-				q="f.drama='1'"
-			elif qry == "fantasy":
-				q="f.fantasy='1'"
-			elif qry == "filmnoir":
-				q="f.filmnoir='1'"
-			elif qry == "horror":
-				q="f.horror='1'"
-			elif qry == "musical":
-				q="f.musical='1'"
-			elif qry == "mystery":
-				q="f.mystery='1'"
-			elif qry == "romance":
-				q="f.romance='1'"
-			elif qry == "scifi":
-				q="f.scifi='1'"
-			elif qry == "thriller":
-				q="f.thriller='1'"
-			elif qry == "war":
-				q="f.war='1'"
-			elif qry == "western":
-				q="f.western='1'"
+			q = get_genre_qry(query)
+		else:
+			q2 = get_genre_qry(query)
+			#if qry_genre != "":
+			q="a.name ~* '%s' OR d.name ~* '%s' OR w.name ~* '%s' OR f.title ~* '%s' OR %s" % (query,query,query,query,q2)
 
 		films = model.selectFilmsWhere(40,q)
 		return render_search_qry(films)

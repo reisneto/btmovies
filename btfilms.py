@@ -1,6 +1,7 @@
 import sys, os
 abspath = os.path.dirname(__file__)
 sys.path.append(abspath)
+os.chdir(abspath)
 import web
 import hashlib
 import model
@@ -31,6 +32,7 @@ store = web.session.DiskStore(os.path.join(abspath,'sessions'))
 session = web.session.Session(app, store,
 				initializer={'login': 0, 'ident': None,'nome':None,'apelido':None,'email':None})
 
+application = app.wsgifunc()
 db = web.database(dbn='postgres', db='rsdb2012', user='postgres', pw='123')
 
 render = render_jinja(
@@ -63,8 +65,9 @@ class Alterar:
 		
 		#perfil = "checked"
 		cod = session.ident	
-		usuario = db.select('usuario', where='us_codigo=$cod', vars=locals())[0]
+		usuario = {}
 		try:
+			usuario = db.select('usuario', where='us_codigo=$cod', vars=locals())[0]
 			perfil = db.select('film_perfils',where='idusuario=$cod', vars=locals())[0]
 		except:
 			perfil = {}
@@ -109,6 +112,7 @@ class Login:
 				session.nome = ident['us_nome']
 				session.ident = ident['us_codigo']
 				session.apelido = ident['us_apelido']
+				session.email = ident['us_email']
 				return index_default()
 			else:
 				session.login = 0
@@ -138,6 +142,7 @@ class Signup:
 		session.nome = usuario['us_nome']
 		session.ident = usuario['us_codigo']
 		session.apelido = usuario['us_apelido']
+		session.email = usuario['us_email']
 
 		return render.alterar(usuario = usuario, perfil = {},logado=session.login,nome=session.nome,apelido=session.apelido)
 		#return index_default()

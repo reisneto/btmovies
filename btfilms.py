@@ -70,9 +70,12 @@ class Alterar:
         
 class Amigos:
 	def GET(self):
-		nome = web.input().nome
-		usuarios = db.query("SELECT * FROM usuario WHERE us_nome ~* $nome OR us_apelido ~* $nome",vars={'nome':nome})
-		return render.amigos(logado=session.login, apelido=session.apelido,usuarios=usuarios)
+		try:
+			nome = web.input().nome
+			usuarios = db.query("SELECT * FROM usuario WHERE us_nome ~* $nome OR us_apelido ~* $nome",vars={'nome':nome})
+			return render.amigos(logado=session.login, apelido=session.apelido,usuarios=usuarios)
+		except:
+			return "You're not a hacker, get out!"
 
 def logged():
 	if session.login==1:
@@ -136,13 +139,17 @@ def render_search_qry(films):
 #TODO: Linkar query com o model
 class MainSearch:	
 	def GET(self):
-#		q = '''af.name = 'Tom Hanks' '''
-		query = web.input().query
-		attbr = web.input().attbr
-		log = "Query %s Attbr:%s" % (query,attbr)
-		logging.error(log) 
-		films = model.selectFilmsWhere(3,"")
+		request = web.input()
+#		try:
+		query = str(request['query'])		
+		attbr = str(request['attbr'])
+		q="a.name ~* '%s' OR d.name ~* '%s' OR w.name ~* '%s' OR f.title ~* '%s' " % (query,query,query,query)
+		if attbr != "":
+			q="%s ~* '%s'" % (attbr,query)
+		films = model.selectFilmsWhere(40,q)
 		return render_search_qry(films)
+#		except:
+#			return "Houston, we have a problem!"
 
 class FindFriends:
 	def GET(self):

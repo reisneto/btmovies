@@ -1,35 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-		<div class="span{{ span_num }}">
-			{% block query_area %}
-				<!-- <div class="leaderboard"> 
-						<div style="text-align:center">
-			<div class="row-fluid">
-				<div class="offset3 span7">
-					<form class="well form-inline" name="frm_search" method="get" action="#">
-						<input type="text" name="query" placeholder="pesquise por" />
-								<select id="attbr">
-									<option> Todos </option>
-									<option> Filmes </option>
-									<option> Gênero </option>
-									<option> Ator </option>
-									<option> Diretor </option>
-									<option> Escritor </option>
-								</select>
-								<button class="btn" type="submit">
-									<i class="icon-search"></i>
-									Pesquisar
-								</button>
-					</form>
-				</div>
-			</div>
-			</div>
-				
-		</div>		  	-->
-			{% endblock query_area %}
-			
-		   
-		  <div class="row-fluid">
+	   
 			  <div class="span12">
 				  <ul class="nav nav-tabs">
 					  <li class="active"> <a href="#">Usuários</a></li>
@@ -54,7 +25,7 @@
 											</p>
 										{% endif %}
 									</div>
-						  </div>
+							  </div>
 							  <hr/>
 						  {% endfor %}
 	  				  {% else %}
@@ -71,5 +42,4 @@
 				  </div>
             </div><!--/span-->
 		</div><!--/row-->
-
 {% endblock content %}

@@ -7,11 +7,11 @@
 					<form class="well form-inline" name="frm_search" method="get" action="/search">
 						<input type="text" name="query" placeholder="pesquise por" />
 								<select id="attbr" name="attbr">
-									<option value="all"> Todos </option>
-									<option value="films"> Filmes </option>
+									<option value=""> Todos </option>
+									<option value="f.title"> Filmes </option>
 									<option value="genre"> Gênero </option>
-									<option value="actor"> Ator </option>
-									<option value="director"> Diretor </option>
+									<option value="a.name"> Ator </option>
+									<option value="d.name"> Diretor </option>
 									<option value="writer"> Escritor </option>
 								</select>
 								<button class="btn" type="submit">
@@ -44,6 +44,7 @@
 									</div>
 									<div class="span2">
 										<p> <i class="icon-film"></i> <strong> Titulo:</strong> {{ film.title }} </p>
+										<p> <i class="icon"></i> <strong> Diretor:</strong> {{ film.director }} </p>
 										<p> <i class="icon-arrow-right"></i> <a href="{{ film.imdb }}" target="_blank"> Mais Detalhes</a>
 										<p> <i class="icon-star-empty"></i><strong> Estrelas:</strong>
 											{% for actor in film.actors %}

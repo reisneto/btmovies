@@ -82,6 +82,45 @@ class Alterar:
 				perfil[k] = ""
 
 		return render.alterar(usuario = usuario, perfil = perfil,logado=session.login,nome=session.nome,apelido=session.apelido)
+	def POST(self):
+		request = web.input()
+		genres_aux = []
+		ones_aux = []
+		logging.error(request)
+		for k, v in request.iteritems():
+			if v == 'on':
+				genres_aux.append(k)
+				ones_aux.append('1')
+
+		genres = ','.join(genres_aux)
+		ones = ','.join(ones_aux)
+		#logging.error(request)
+		db.query("DELETE FROM film_perfils WHERE idusuario=$ident",vars={'ident':session.ident})
+		q = "INSERT INTO film_perfils(idusuario,%s) VALUES(%s,%s)" % (genres,session.ident,ones)		
+		db.query(q)
+
+	
+		us_nome = web.input().name
+		us_apelido = web.input().nick
+		us_cpf = web.input().cpf
+		us_email = web.input().email
+		pwd1 = web.input().pwd
+		pwd2 = web.input().pwd2
+
+		pwd =hashlib.sha256("sAlT754-"+pwd1).hexdigest()
+
+		if pwd1 == pwd2 and pwd1 != "":
+			db.query("UPDATE usuario SET (us_nome,us_cpf,us_email,us_apelido,us_senha) = ($nome,$cpf,$email,$apelido,$senha) WHERE us_codigo=$cod",vars={'apelido':us_apelido,'email':us_email,'senha':pwd,'cpf':us_cpf,'nome':us_nome,'cod':session.ident})
+		else:
+			db.query("UPDATE usuario SET (us_nome,us_cpf,us_email,us_apelido) = ($nome,$cpf,$email,$apelido) WHERE us_codigo=$cod",vars={'apelido':us_apelido,'email':us_email,'cpf':us_cpf,'nome':us_nome,'cod':session.ident})
+
+		session.login = 1
+		session.nome = us_nome
+#		session.ident = usuario['us_codigo']
+		session.apelido = us_apelido
+		session.email = us_email
+
+		return index_default()
         
 class Amigos:
 	def GET(self):

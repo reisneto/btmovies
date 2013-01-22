@@ -10,12 +10,12 @@
 			<form class="well" name="frm_alt" style="min-height: 410px;" method="post" action="/alterar">
 				
 				<div class="span6"> 
-					  <label>Nome:</label> <input placeholder="Digite seu nome aqui" name="name" type="text" value=" {{ usuario.us_nome }}" />
-					  <label>Apelido:</label> <input  placeholder="Digite seu apelido aqui" name="nick" type="text" value=" {{ usuario.us_apelido }}"/>
-					  <label>Cpf:</label> <input placeholder="Digite seu cpf aqui" name="cpf" type="text" value=" {{ usuario.us_cpf }}" />
-					  <label>Email:</label> <input placeholder="Digite seu email aqui" name="email" type="text" value=" {{ usuario.us_email }}" />
+					  <label>Nome:</label> <input placeholder="Digite seu nome aqui" name="name" type="text" value="{{ usuario.us_nome }}" />
+					  <label>Apelido:</label> <input  placeholder="Digite seu apelido aqui" name="nick" type="text "value="{{ usuario.us_apelido }}"/>
+					  <label>Cpf:</label> <input placeholder="Digite seu cpf aqui" name="cpf" type="text" value="{{ usuario.us_cpf }}" />
+					  <label>Email:</label> <input placeholder="Digite seu email aqui" name="email" type="text" value="{{ usuario.us_email }}" />
 					  <label>Nova Senha:</label> <input placeholder="Digite sua nova senha aqui" name="pwd" type="password"/>
-					  <label>Confimar Senha:</label> <input placeholder="Digite sua nova senha novamente" name="pwd" type="password"/>
+					  <label>Confimar Senha:</label> <input placeholder="Digite sua nova senha novamente" name="pwd2" type="password"/>
 					  <label>
 							  <input type="submit" class="btn" value="Alterar" />
 					  </label>

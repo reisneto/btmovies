@@ -78,10 +78,10 @@ ALTER TABLE public.actorsfilm OWNER TO postgres;
 --
 
 CREATE TABLE amizade (
-    am_codigo integer NOT NULL,
     am_usuario integer NOT NULL,
     am_amigo integer NOT NULL,
-    am_confianca smallint DEFAULT 0
+    am_confianca smallint DEFAULT 0,
+    am_codigo integer NOT NULL
 );
 
 
@@ -174,6 +174,36 @@ ALTER TABLE public.fabricante_fb_codigo_seq OWNER TO postgres;
 
 ALTER SEQUENCE fabricante_fb_codigo_seq OWNED BY fabricante.fb_codigo;
 
+
+--
+-- Name: film_perfils; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE film_perfils (
+    idusuario integer NOT NULL,
+    unknown character(1) DEFAULT 0 NOT NULL,
+    action character(1) DEFAULT 0 NOT NULL,
+    adventure character(1) DEFAULT 0 NOT NULL,
+    animation character(1) DEFAULT 0 NOT NULL,
+    children character(1) DEFAULT 0 NOT NULL,
+    comedy character(1) DEFAULT 0 NOT NULL,
+    crime character(1) DEFAULT 0 NOT NULL,
+    documentary character(1) DEFAULT 0 NOT NULL,
+    drama character(1) DEFAULT 0 NOT NULL,
+    fantasy character(1) DEFAULT 0 NOT NULL,
+    filmnoir character(1) DEFAULT 0 NOT NULL,
+    horror character(1) DEFAULT 0 NOT NULL,
+    musical character(1) DEFAULT 0 NOT NULL,
+    mystery character(1) DEFAULT 0 NOT NULL,
+    romance character(1) DEFAULT 0 NOT NULL,
+    scifi character(1) DEFAULT 0 NOT NULL,
+    thriller character(1) DEFAULT 0 NOT NULL,
+    war character(1) DEFAULT 0 NOT NULL,
+    western character(1) DEFAULT 0 NOT NULL
+);
+
+
+ALTER TABLE public.film_perfils OWNER TO postgres;
 
 --
 -- Name: films_filmid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -295,6 +325,18 @@ ALTER SEQUENCE loja_lj_codigo_seq OWNED BY loja.lj_codigo;
 
 
 --
+-- Name: recommendationsfromfriends; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE recommendationsfromfriends (
+    idusuario integer NOT NULL,
+    idfilm integer NOT NULL
+);
+
+
+ALTER TABLE public.recommendationsfromfriends OWNER TO postgres;
+
+--
 -- Name: usuario; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
@@ -304,7 +346,7 @@ CREATE TABLE usuario (
     us_cpf character varying(12) NOT NULL,
     us_email character varying(80) NOT NULL,
     us_apelido character varying(30),
-    us_senha character varying(25) NOT NULL
+    us_senha character varying(64) NOT NULL
 );
 
 
@@ -2291,9 +2333,6 @@ COPY actorsfilm (idfilm, idactor) FROM stdin;
 31	22
 31	84
 31	85
-32	86
-32	87
-32	88
 33	89
 33	90
 33	91
@@ -2835,9 +2874,6 @@ COPY actorsfilm (idfilm, idactor) FROM stdin;
 319	45
 319	306
 319	419
-320	491
-320	492
-320	493
 322	494
 322	495
 322	496
@@ -3410,9 +3446,6 @@ COPY actorsfilm (idfilm, idactor) FROM stdin;
 641	838
 641	839
 641	840
-645	841
-645	842
-645	843
 647	844
 647	845
 647	846
@@ -3881,9 +3914,6 @@ COPY actorsfilm (idfilm, idactor) FROM stdin;
 883	77
 883	485
 883	1072
-884	1073
-884	1074
-884	1075
 885	596
 885	1076
 885	1077
@@ -3980,9 +4010,6 @@ COPY actorsfilm (idfilm, idactor) FROM stdin;
 953	154
 953	140
 953	1109
-954	1110
-954	1111
-954	1112
 955	337
 955	1113
 955	1114
@@ -4118,9 +4145,6 @@ COPY actorsfilm (idfilm, idactor) FROM stdin;
 1020	1178
 1020	676
 1020	251
-1022	1179
-1022	1180
-1022	1181
 1023	190
 1023	367
 1023	1182
@@ -4327,9 +4351,6 @@ COPY actorsfilm (idfilm, idactor) FROM stdin;
 1139	665
 1139	511
 1139	1272
-1142	1273
-1142	1274
-1142	1275
 1145	368
 1145	196
 1145	378
@@ -4489,9 +4510,6 @@ COPY actorsfilm (idfilm, idactor) FROM stdin;
 1231	393
 1231	1358
 1231	1359
-1232	465
-1232	1360
-1232	1361
 1233	1362
 1233	1363
 1233	1364
@@ -4725,9 +4743,6 @@ COPY actorsfilm (idfilm, idactor) FROM stdin;
 1377	1495
 1377	1496
 1377	1497
-1378	1498
-1378	1499
-1378	1500
 1379	1501
 1379	1502
 1379	1503
@@ -4746,9 +4761,6 @@ COPY actorsfilm (idfilm, idactor) FROM stdin;
 1388	1512
 1388	1513
 1388	1514
-1391	1515
-1391	1516
-1391	1517
 1393	1518
 1393	1137
 1393	1519
@@ -5033,9 +5045,6 @@ COPY actorsfilm (idfilm, idactor) FROM stdin;
 1582	1601
 1582	1686
 1582	1687
-1585	1688
-1585	1689
-1585	1690
 1587	1691
 1587	1129
 1587	1692
@@ -5174,7 +5183,6 @@ COPY actorsfilm (idfilm, idactor) FROM stdin;
 1679	1776
 1679	1164
 1679	1330
-1681	73
 1682	1777
 1682	1778
 1682	1779
@@ -5188,7 +5196,11 @@ COPY actorsfilm (idfilm, idactor) FROM stdin;
 -- Data for Name: amizade; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY amizade (am_codigo, am_usuario, am_amigo, am_confianca) FROM stdin;
+COPY amizade (am_usuario, am_amigo, am_confianca, am_codigo) FROM stdin;
+1	2	80	1
+2	1	90	2
+1	3	75	3
+2	3	50	4
 \.
 
 
@@ -5196,7 +5208,7 @@ COPY amizade (am_codigo, am_usuario, am_amigo, am_confianca) FROM stdin;
 -- Name: amizade_am_codigo_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('amizade_am_codigo_seq', 1, false);
+SELECT pg_catalog.setval('amizade_am_codigo_seq', 4, true);
 
 
 --
@@ -5928,6 +5940,15 @@ SELECT pg_catalog.setval('fabricante_fb_codigo_seq', 1, false);
 
 
 --
+-- Data for Name: film_perfils; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY film_perfils (idusuario, unknown, action, adventure, animation, children, comedy, crime, documentary, drama, fantasy, filmnoir, horror, musical, mystery, romance, scifi, thriller, war, western) FROM stdin;
+1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1
+\.
+
+
+--
 -- Data for Name: films; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -5946,7 +5967,6 @@ COPY films (filmid, title, imdb, unknown, action, adventure, animation, children
 27	Bad Boys	http://us.imdb.com/M/title-exact?Bad%20Boys%20(1995)	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	6.69999981	30	1995	Two hip detectives protect a murder witness while investigating a case of stolen heroin.	img_27.jpg
 28	Apollo 13	http://us.imdb.com/M/title-exact?Apollo%2013%20(1995)	0	1	0	0	0	0	0	0	1	0	0	0	0	0	0	0	1	0	0	7.5	31	1995	Three astronauts must devise a strategy to return to Earth safely after their spacecraft undergoes massive internal damage.	img_28.jpg
 30	Belle de jour	http://us.imdb.com/M/title-exact?Belle%20de%20jour%20(1967)	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	7.80000019	33	1967	A frigid young housewife decides to spend her midweek afternoons as a prostitute.	img_30.jpg
-32	Crumb	http://us.imdb.com/M/title-exact?Crumb%20(1994)	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	7.9000001	35	1994	An intimate portrait of the controversial cartoonist and his traumatized family.	img_32.jpg
 33	Desperado	http://us.imdb.com/M/title-exact?Desperado%20(1995)	0	1	0	0	0	0	0	0	0	0	0	0	0	0	1	0	1	0	0	7.0999999	24	1995	A gunslinger is embroiled in a war with a local drug runner.	img_33.jpg
 36	Mad Love	http://us.imdb.com/M/title-exact?Mad%20Love%20(1995)	0	0	0	0	0	0	0	0	1	0	0	0	0	0	1	0	0	0	0	4.80000019	37	1995	Casey and Matt are high school kids in love. They run away together Casey&#x27;s parents check her into a mental hospital for trying to kll herself...	img_36.jpg
 39	Strange Days	http://us.imdb.com/M/title-exact?Strange%20Days%20(1995)	0	1	0	0	0	0	1	0	0	0	0	0	0	0	0	1	0	0	0	7.0999999	40	1995	A former cop turned street-hustler accidentally uncovers a police conspiracy in 1999 Los Angeles.	img_39.jpg
@@ -6203,7 +6223,6 @@ COPY films (filmid, title, imdb, unknown, action, adventure, animation, children
 872	Love Jones	http://us.imdb.com/M/title-exact?Love%20Jones%20(1997)	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	6.80000019	394	1997	Darius Lovehall is a young black poet in Chicago who starts dating Nina Moseley, a beautiful and talented photographer...	img_872.jpg
 874	Career Girls	http://us.imdb.com/M/title-exact?Career+Girls+(1997)	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	7	162	1997	2 young women reunite and rekindle their friendship after having said goodbye at their college graduation, six years earlier.	img_874.jpg
 881	Money Talks	http://us.imdb.com/M/title-exact?Money+Talks+(1997)	0	1	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	5.80000019	396	1997	Sought by police and criminals, a small-time huckster makes a deal with a TV newsman for protection.	img_881.jpg
-884	Year of the Horse	http://us.imdb.com/M/title-exact?Year+of+the+Horse+(1997)	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	6.5	255	1997	This film documents Neil Young and Crazy Horse&#x27;s 1996 concert tour. Jim Jarmusch interviews the band about their long history, and we see backstage footage from the 1970s and 1980s.	img_884.jpg
 885	Phantoms	http://us.imdb.com/M/title-exact?Phantoms+(1998)	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	5.19999981	381	1998	150 dead and 350 missing in the tiny mountain town of Snowfield, Colorado. And that&#x27;s only the beginning...	img_885.jpg
 890	Mortal Kombat: Annihilation	http://us.imdb.com/M/title-exact?Mortal+Kombat%3A+Annihilation+(1997)	0	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	3.4000001	402	1997	A group of martial arts warriors have only six days to save the Earth from an extra-dimensional invasion.	img_890.jpg
 912	U.S. Marshalls	http://us.imdb.com/Title?U.S.+Marshals+(1998)	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	6.30000019	321	1998	US Marshal Samuel Gerard (Jones) and his team of Marshals are assigned to track down Sheridan (Snipes), a murderer and robber.	img_912.jpg
@@ -6242,7 +6261,6 @@ COPY films (filmid, title, imdb, unknown, action, adventure, animation, children
 1217	Assassins	http://us.imdb.com/Title?Assassins+(1995)	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	6.0999999	60	1995	Robert Rath is a seasoned hitman who just wants out of the business with no back talk. But, as things go...	img_1217.jpg
 1281	Manny & Lo	http://us.imdb.com/M/title-exact?Manny%20&%20Lo%20(1996)	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	6.80000019	549	1996	A pregnant teen and her younger sister run away from foster homes and kidnap a woman whom they believe can help with the pregnancy.	img_1281.jpg
 1016	Con Air	http://us.imdb.com/M/title-exact?Con%20Air%20%281997%29	0	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	6.69999981	446	1997	A newly released ex-con and former US Ranger finds himself trapped in a prisoner transport plane when the passengers seize control.	img_1016.jpg
-1022	Fast, Cheap & Out of Control	http://us.imdb.com/M/title-exact?Fast,+Cheap+&+Out+of+Control+(1997)	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	7.19999981	448	1997	What do an elderly topiary gardener, a retired lion tamer, a man fascinated by mole rats, and a cutting-edge robotics designer have in common...	img_1022.jpg
 1025	Fire Down Below	http://us.imdb.com/M/title-exact?Fire+Down+Below+(1997)	0	1	0	0	0	0	0	0	1	0	0	0	0	0	0	0	1	0	0	4.5999999	449	1997	Environmental protection agent Jack Taggart is fighting big business types led by Orin Hanner who are dumping toxic waste somewhere in the Kentucky hills region...	img_1025.jpg
 1029	Jury Duty	http://us.imdb.com/M/title-exact?Jury%20Duty%20(1995)	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	3.70000005	451	1995	When jobless Tommy Collins discovers that sequestered jurors earn free room and board as well as $5-a-day...	img_1029.jpg
 1032	Little Big League	http://us.imdb.com/M/title-exact?Little%20Big%20League%20(1994)	0	0	0	0	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	5.80000019	453	1994	A young boy is bequeathed the ownership of a professional baseball team.	img_1032.jpg
@@ -6276,7 +6294,6 @@ COPY films (filmid, title, imdb, unknown, action, adventure, animation, children
 1131	Safe	http://us.imdb.com/M/title-exact?Safe%20(1995)	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	7	494	1995	An affluent and unexceptional homemaker in the suburbs develops multiple chemical sensitivity.	img_1131.jpg
 1133	Escape to Witch Mountain	http://us.imdb.com/M/title-exact?Escape%20to%20Witch%20Mountain%20(1975)	0	0	1	0	1	0	0	0	0	1	0	0	0	0	0	0	0	0	0	6.19999981	496	1975	Two mysterious orphan children have extraordinary powers and are chased by a scheming millionaire. But where do these kids really call home?	img_1133.jpg
 1137	Beautiful Thing	http://us.imdb.com/M/title-exact?Beautiful%20Thing%20(1996)	0	0	0	0	0	0	0	0	1	0	0	0	0	0	1	0	0	0	0	7.5	497	1996	In a suburb of London, young Jamie is escaping sport hours, to avoid being the victim of his comrades. Young Ste, his neighbor, is beaten by his father, and comes to sleep overnight. They discover new feelings, sleeping in the same bed.	img_1137.jpg
-1142	When We Were Kings	http://us.imdb.com/M/title-exact?When%20We%20Were%20Kings%20(1996)	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	7.80000019	499	1996	A documentary of the 1974 heavyweight championship bout in Zaire between champion George Foreman and underdog challenger Muhammad Ali.	img_1142.jpg
 1146	Calendar Girl	http://us.imdb.com/M/title-exact?Calendar%20Girl%20(1993)	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	4.80000019	501	1993	Three young men go on an end of the summer trip to Hollywood, CA. Their quest: to fulfill the fantasy of meeting Marilyn Monroe.	img_1146.jpg
 1149	Walkabout	http://us.imdb.com/M/title-exact?Walkabout%20(1971)	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	7.69999981	504	1971	Two young children are stranded in the Australian outback and are forced to cope on their own. They meet an Aborigine on &#x22;walkabout&#x22;: a ritualistic separation from his tribe.	img_1149.jpg
 1151	Original Gangstas	http://us.imdb.com/M/title-exact?Original%20Gangstas%20(1996)	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	5.5999999	505	1996	Marvin Bookman is a small shop owner in Gary, Indiana, USA. After he sees a drive-by shooting of Laurie Thompson&#x27;s son by a local gang...	img_1151.jpg
@@ -6342,7 +6359,6 @@ COPY films (filmid, title, imdb, unknown, action, adventure, animation, children
 1379	Love and Other Catastrophes	http://us.imdb.com/M/title-exact?Love%20and%20Other%20Catastrophes%20%281996%29	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	5.80000019	595	1996	A day in the life of two film-school students trying to find love and another house-mate.	img_1379.jpg
 1385	Roseanna's Grave (For Roseanna)	http://us.imdb.com/M/title-exact?Roseanna%27s+Grave+(1997)	0	0	0	0	0	1	0	0	0	0	0	0	0	0	1	0	0	0	0	6.9000001	279	1997	Roseanna is dying of a heart condition, and all she wants is to be buried next to her daughter, in a cemetery that is getting full fast...	img_1385.jpg
 1387	Fall	http://us.imdb.com/M/title-exact?Fall+(1997)	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	5.5999999	354	1997	Cab driver Michael and supermodel Sarah fall in love while her gorgeous husband Phillippe is in Madrid for two months.	img_1387.jpg
-1391	For Ever Mozart	http://us.imdb.com/M/title-exact?For+Ever+Mozart+(1996)	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	6.5	588	1996	</p>	img_1391.jpg
 1393	Stag	http://us.imdb.com/M/title-exact?Stag+(1997)	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	5.5	598	1997	Victor Mallick returned to his home and found out that all of his friends have arranged a surprise bachelor/stag party for him...	img_1393.jpg
 1396	Stonewall	http://us.imdb.com/M/title-exact?Stonewall%20(1995)	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	6.9000001	600	1995	A group of homosexual people try to live with dignity and self-respect while events build to the opening battle in the major gay rights movement.	img_1396.jpg
 1408	Gordy	http://us.imdb.com/M/title-exact?Gordy%20(1995)	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	3.4000001	601	1995	A talking pig named Gordy becomes involved in a quest to save his family from the slaughterhouse.	img_1408.jpg
@@ -6433,7 +6449,6 @@ COPY films (filmid, title, imdb, unknown, action, adventure, animation, children
 37	Nadja	http://us.imdb.com/M/title-exact?Nadja%20(1994)	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	5.80000019	39	1994	This ultra-hip, post-modern vampire tale is set in contemporary New York City. Members of a dysfunctional family of vampires are trying to come to terms with each other...	img_37.jpg
 53	Natural Born Killers	http://us.imdb.com/M/title-exact?Natural%20Born%20Killers%20(1994)	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	7.19999981	49	1994	Two victims of traumatized childhoods become lovers and psychopathic serial murderers irresponsibly glorified by the mass media.	img_53.jpg
 54	Outbreak	http://us.imdb.com/M/title-exact?Outbreak%20(1995)	0	1	0	0	0	0	0	0	1	0	0	0	0	0	0	0	1	0	0	6.5	50	1995	Extreme measures are necessary to contain an epidemic of a deadly airborne virus. But how extreme, exactly?	img_54.jpg
-1681	You So Crazy	http://us.imdb.com/M/title-exact?You%20So%20Crazy%20(1994)	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	6	70	1994	Stand up comedy by Martin Lawrence, filmed in the Majestic Theater in New York City. Martin Lawrence talks about everything from racism, to relationships, to his childhood.	img_1681.jpg
 56	Pulp Fiction	http://us.imdb.com/M/title-exact?Pulp%20Fiction%20(1994)	0	0	0	0	0	0	1	0	1	0	0	0	0	0	0	0	0	0	0	9	52	1994	The lives of two mob hit men, a boxer, a gangster&#x27;s wife, and a pair of diner bandits intertwine in four tales of violence and redemption.	img_56.jpg
 58	Quiz Show	http://us.imdb.com/M/title-exact?Quiz%20Show%20(1994)	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	7.5	53	1994	Dick Goodwin discovers game shows are fixed: Charles Van Doren is fed answers so he beats Herbie Stempel.	img_58.jpg
 65	What's Eating Gilbert Grape	http://us.imdb.com/M/title-exact?What's%20Eating%20Gilbert%20Grape%20(1993)	0	0	0	0	0	1	0	0	1	0	0	0	0	0	0	0	0	0	0	7.69999981	55	1993	Gilbert has to care for his brother Arnie and his obese mother, which gets in the way when love walks into his life.	img_65.jpg
@@ -6523,7 +6538,6 @@ COPY films (filmid, title, imdb, unknown, action, adventure, animation, children
 304	Fly Away Home	http://us.imdb.com/M/title-exact?Fly%20Away%20Home%20(1996)	0	0	1	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	6.80000019	172	1996	A father and daughter decide to attempt to lead a flock of orphaned Canada Geese south by air.	img_304.jpg
 312	Midnight in the Garden of Good and Evil	http://us.imdb.com/M/title-exact?Midnight+in+the+Garden+of+Good+and+Evil+(1997)	0	0	0	0	0	1	1	0	1	0	0	0	0	1	0	0	0	0	0	6.5	121	1997	A visiting city reporter&#x27;s assignment suddenly revolves around the murder trial of a local millionaire, whom he befriends.	img_312.jpg
 318	Schindler's List	http://us.imdb.com/M/title-exact?Schindler's%20List%20(1993)	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	1	0	8.89999962	65	1993	In Poland during World War II, Oskar Schindler gradually becomes concerned for his Jewish workforce after witnessing their persecution by the Nazis.	img_318.jpg
-320	Paradise Lost: The Child Murders at Robin Hood Hills	http://us.imdb.com/M/title-exact?Paradise%20Lost%3a%20The%20Child%20Murders%20at%20Robin%20Hood%20Hills%20(1996)	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	8.30000019	175	1996	A horrific triple child murder leads to an indictment and trial of three nonconformist boys based on questionable evidence.	img_320.jpg
 323	Dante's Peak	http://us.imdb.com/M/title-exact?Dante's%20Peak%20(1997)	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	5.69999981	176	1997	A vulcanologist arrives at a countryside named Dante&#x27;s Peak after a long dormant volcano, which has recently been named the second most desirable place to live in America, and discovers that Dante&#x27;s Peak, may wake up at any moment.	img_323.jpg
 325	Crash	http://us.imdb.com/M/title-exact?Crash%20(1996)	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	1	0	0	6.30000019	178	1996	After getting into a serious car accident, a TV director discovers an underground sub-culture of scarred, omnisexual car-crash victims who use car accidents and the raw sexual energy they produce to try to rejuvenate his sex life with his wife.	img_325.jpg
 327	Cop Land	http://us.imdb.com/M/title-exact?Cop+Land+(1997)	0	0	0	0	0	0	1	0	1	0	0	0	0	1	0	0	0	0	0	6.9000001	179	1997	The sheriff of a suburban New Jersey community populated by New York City policemen slowly discovers the town is a front for mob connections and corruption.	img_327.jpg
@@ -6626,7 +6640,6 @@ COPY films (filmid, title, imdb, unknown, action, adventure, animation, children
 628	Sleepers	http://us.imdb.com/M/title-exact?Sleepers%20(1996)	0	0	0	0	0	0	1	0	1	0	0	0	0	0	0	0	0	0	0	7.4000001	42	1996	After a prank goes disastrously wrong, a group of boys are sent to a detention center where they are brutalized; over 10 years later, they get their chance for revenge.	img_628.jpg
 634	Microcosmos: Le peuple de l'herbe	http://us.imdb.com/M/title-exact?Microcosmos%3A%20Le%20peuple%20de%20l%27herbe%20%281996%29	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	7.9000001	303	1996	A documentary of insect life in meadows and ponds, using incredible close-ups, slow motion, and time-lapse photography...	img_634.jpg
 641	Paths of Glory	http://us.imdb.com/M/title-exact?Paths%20of%20Glory%20(1957)	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	1	0	8.5	95	1957	When soldiers in WW1 refuse to continue with an impossible attack, their superiors decide to make an example of them.	img_641.jpg
-645	Paris Is Burning	http://us.imdb.com/M/title-exact?Paris%20Is%20Burning%20(1990)	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	7.5999999	304	1990	A chronicle of New York&#x27;s drag scene in the 1980s, focusing on balls, voguing and the ambitions and dreams of those who gave the era its warmth and vitality.	img_645.jpg
 651	Glory	http://us.imdb.com/M/title-exact?Glory%20(1989)	0	1	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	1	0	7.9000001	48	1989	Robert Gould Shaw leads the US Civil War&#x27;s first all-black volunteer company, fighting prejudices of both his own Union army and the Confederates.	img_651.jpg
 653	Touch of Evil	http://us.imdb.com/M/title-exact?Touch%20of%20Evil%20(1958)	0	0	0	0	0	0	1	0	0	0	1	0	0	0	0	0	1	0	0	8.30000019	94	1958	Stark, perverse story of murder, kidnapping, and police corruption in Mexican border town.	img_653.jpg
 654	Chinatown	http://us.imdb.com/M/title-exact?Chinatown%20(1974)	0	0	0	0	0	0	0	0	0	0	1	0	0	1	0	0	1	0	0	8.39999962	306	1974	A private detective investigating an adultery case stumbles on to a scheme of murder that has something to do with water.	img_654.jpg
@@ -6728,7 +6741,6 @@ COPY films (filmid, title, imdb, unknown, action, adventure, animation, children
 949	How to Make an American Quilt	http://us.imdb.com/M/title-exact?How%20to%20Make%20an%20American%20Quilt%20(1995)	0	0	0	0	0	0	0	0	1	0	0	0	0	0	1	0	0	0	0	5.9000001	417	1995	Bride-to-be Finn Dodd hears tales of romance and sorrow from her elders as they construct a quilt.	img_949.jpg
 1177	Dunston Checks In	http://us.imdb.com/M/title-exact?Dunston%20Checks%20In%20(1996)	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	4.80000019	516	1996	Young boy befriends larcenous orangutan in luxury hotel.	img_1177.jpg
 952	Blue in the Face	http://us.imdb.com/M/title-exact?Blue%20in%20the%20Face%20(1995)	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	6.5	419	1995	Wayne Wang&#x27;s follow-up movie to Smoke presents a series of improvisational situations strung together to form a pastiche of Brooklyn&#x27;s diverse ethnicity...	img_952.jpg
-954	Unzipped	http://us.imdb.com/M/title-exact?Unzipped%20(1995)	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	6.0999999	421	1995	Isaac Mizrahi, one of the most successful designers in high fashion, plans his fall 1994 collection...	img_954.jpg
 955	Before Sunrise	http://us.imdb.com/M/title-exact?Before%20Sunrise%20(1995)	0	0	0	0	0	0	0	0	1	0	0	0	0	0	1	0	0	0	0	8	422	1995	A young man and woman meet on a train in Europe, and wind up spending one romantic evening together in Vienna. Unfortunately, both know that this will probably be their only night together.	img_955.jpg
 959	Dazed and Confused	http://us.imdb.com/M/title-exact?Dazed%20and%20Confused%20(1993)	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	7.5999999	422	1993	The adventures of incoming high school and junior high students on the last day of school, in May of 1976.	img_959.jpg
 962	Ruby in Paradise	http://us.imdb.com/M/title-exact?Ruby%20in%20Paradise%20(1993)	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	6.9000001	167	1993	Ruby, a young woman, arrives in a Florida resort town during the off season to make a fresh start. She gets work as a sales clerk in a souvineer shop run by Mildred Chambers...	img_962.jpg
@@ -6812,7 +6824,6 @@ COPY films (filmid, title, imdb, unknown, action, adventure, animation, children
 1221	When a Man Loves a Woman	http://us.imdb.com/M/title-exact?When%20a%20Man%20Loves%20a%20Woman%20(1994)	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	6.19999981	533	1994	An airline pilot and his wife are forced to face the consequences of her alcoholism when her addictions threaten her life and their daughter&#x27;s safety. While the woman enters detox, her husband must face the truth of his enabling behavior.	img_1221.jpg
 1225	Angus	http://us.imdb.com/M/title-exact?Angus%20(1995)	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	6.30000019	535	1995	A miserable fat teenager secretly has a crush on the class beauty, ends up becoming the surprising participant to dance with her at a high school dance, meaning he&#x27;s got to get his act together with the help of his best friend.	img_1225.jpg
 1228	Under Siege 2: Dark Territory	http://us.imdb.com/M/title-exact?Under%20Siege%202:%20Dark%20Territory%20(1995)	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	5.19999981	520	1995	Casey Ryback hops on a Colorado to LA train to start a vacation with his niece. Early into the trip, terrorists board the train and use it as a mobile HQ to hijack a top secret destructive US satellite.	img_1228.jpg
-1232	Madonna: Truth or Dare	http://us.imdb.com/M/title-exact?Madonna:%20Truth%20or%20Dare%20(1991)	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	5.5	413	1991	Documentary following singer Madonna on her controversial Blond Ambition tour in 1990.	img_1232.jpg
 1239	Cutthroat Island	http://us.imdb.com/M/title-exact?Cutthroat%20Island%20(1995)	0	1	1	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	5.4000001	132	1995	A female pirate and her companion race against their rivals to find a hidden island that contains a fabulous treasure.	img_1239.jpg
 1244	Metro	http://us.imdb.com/M/title-exact?Metro%20(1997)	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	5.30000019	538	1997	Roper, a hostage negotiator catches a murderous bank robber after a blown heist. The bank robber escapes and immediately goes after the man who put him behind bars...	img_1244.jpg
 1248	Blink	http://us.imdb.com/M/title-exact?Blink%20(1994)	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	6	299	1994	Emma is an attractive girl in her 20s who has been blind for 20 years. A new type of eye operation partially restores her sight...	img_1248.jpg
@@ -6845,7 +6856,6 @@ COPY films (filmid, title, imdb, unknown, action, adventure, animation, children
 1368	Mina Tannenbaum	http://us.imdb.com/M/title-exact?Mina%20Tannenbaum%20(1994)	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	7	590	1994	The film tells the story of two girls who are of totally different character. They know each other since their childhood and were friends until they became teenagers...	img_1368.jpg
 1374	Falling in Love Again	http://us.imdb.com/M/title-exact?Falling%20in%20Love%20Again%20(1980)	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	5	591	1980	Harry and Sue Lewis met in the 40es as teenagers living in the Bronx. He was an aspiring architect, she was the most beautiful girl in school...	img_1374.jpg
 1376	Meet Wally Sparks	http://us.imdb.com/M/title-exact?Meet%20Wally%20Sparks%20(1997)	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	4.80000019	592	1997	Wally Sparks is a tabloid TV show reporter who&#x27;s trying to boost ratings on his show. He goes to the governor&#x27;s mansion to uncover a sex scandal.	img_1376.jpg
-1378	Rhyme & Reason	http://us.imdb.com/M/title-exact?Rhyme%20%26%20Reason%20(1997)	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	7.0999999	594	1997	A study in the world of hip-hop, done mostly with interviews, in order to see why it is as popular as it is today and what the future holds.	img_1378.jpg
 1380	Hollow Reed	http://us.imdb.com/Title?Hollow+Reed+(1996)	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	7.19999981	568	1996	Following the break-up of his marriage after revealing his homosexuality, GP Martin Wyatt loses custody of his son Oliver to his now ex-wife Hannah and her new partner Frank...	img_1380.jpg
 1386	Tetsuo II: Body Hammer	http://us.imdb.com/M/title-exact?Tetsuo+II%3A+Body+Hammer+(1992)	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	6.19999981	596	1992	Sequel to &#x22;Tetsou&#x22; this time has the Iron Man transforming into cyberkinetic gun when a gang of vicious skinheads kidnap his son...	img_1386.jpg
 1388	Gabbeh	http://us.imdb.com/M/title-exact?Gabbeh+(1996)	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	6.9000001	597	1996	An elderly couple go about their routine of cleaning their gabbeh (a intricately-designed rug), while bickering gently with each other...	img_1388.jpg
@@ -6898,7 +6908,6 @@ COPY films (filmid, title, imdb, unknown, action, adventure, animation, children
 1571	Touki Bouki (Journey of the Hyena)	http://us.imdb.com/M/title-exact?Touki%20Bouki%20(1973)	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	7	666	1973	Mory, a cowherd who rides a motorcycle mounted with a cow&#x27;s skull, and Anta, a university student...	img_1571.jpg
 1574	Pharaoh's Army	http://us.imdb.com/M/title-exact?Pharaoh's%20Army%20(1995)	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	7	667	1995	During the American Civil War, a Union Army captain leads his rag-tag cavalry troop up a misty creek to a remote farm to steal enemy (Confederate) livestock...	img_1574.jpg
 1576	Hungarian Fairy Tale, A	http://us.imdb.com/M/title-exact?Hol%20volt,%20hol%20nem%20volt%20(1987)	0	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	5.9000001	668	1987	Shot in B&#x26;W, Gyula Gazdag&#x27;s film follows the surreal and often comic quests of young Andris...	img_1576.jpg
-1585	American Dream	http://us.imdb.com/M/title-exact?American%20Dream%20(1990)	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	7.9000001	669	1990	Chronicles the six-month strike at Hormel in Austin, Minnesota, in 1985-86. The local union, P-9 of the Food and Commercial Workers...	img_1585.jpg
 1588	Salut cousin!	http://us.imdb.com/M/title-exact?Salut%20cousin!%20(1996)	0	0	0	0	0	1	0	0	1	0	0	0	0	0	0	0	0	0	0	6.19999981	671	1996	Salut Cousin! is the tale of two Algerian cousins and their mishaps in the racially volatile environment of Paris.	img_1588.jpg
 1595	Shopping	http://us.imdb.com/M/title-exact?Shopping%20(1994)	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	5.0999999	147	1994	Lone group of teens, led by recently released joyrider and his disenchanted Belfast girlfriend, strives...	img_1595.jpg
 1598	City of Industry	http://us.imdb.com/M/title-exact?City%20of%20Industry%20(1997)	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	1	0	0	6	328	1997	A retired thief swears revenge on the lunatic who murdered his brother and partner, while going on the run with the loot they stole.	img_1598.jpg
@@ -6963,10 +6972,31 @@ SELECT pg_catalog.setval('loja_lj_codigo_seq', 1, false);
 
 
 --
+-- Data for Name: recommendationsfromfriends; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY recommendationsfromfriends (idusuario, idfilm) FROM stdin;
+1	100
+1	120
+1	124
+2	110
+2	125
+3	100
+3	124
+3	120
+3	110
+3	125
+\.
+
+
+--
 -- Data for Name: usuario; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY usuario (us_codigo, us_nome, us_cpf, us_email, us_apelido, us_senha) FROM stdin;
+1	Alison	000000	alison.marczewski@gmail.com	amarczew	123
+2	Teste	000000	teste	teste	123
+3	Tiago	0000000	ogait	ogait	e82e87a44734e6e3cc134f52c777041e3e212745b8fca14509961032e0fa7527
 \.
 
 
@@ -6974,7 +7004,7 @@ COPY usuario (us_codigo, us_nome, us_cpf, us_email, us_apelido, us_senha) FROM s
 -- Name: usuario_us_codigo_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('usuario_us_codigo_seq', 1, false);
+SELECT pg_catalog.setval('usuario_us_codigo_seq', 3, true);
 
 
 --
@@ -9918,14 +9948,6 @@ ALTER TABLE ONLY films
 
 
 --
--- Name: pk_amizade; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
---
-
-ALTER TABLE ONLY amizade
-    ADD CONSTRAINT pk_amizade PRIMARY KEY (am_codigo);
-
-
---
 -- Name: pk_fabricante; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
@@ -10006,6 +10028,14 @@ ALTER TABLE ONLY usuario
 
 
 --
+-- Name: unique_usuario_film; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY recommendationsfromfriends
+    ADD CONSTRAINT unique_usuario_film UNIQUE (idusuario, idfilm);
+
+
+--
 -- Name: writers_name_unique; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
@@ -10034,13 +10064,6 @@ ALTER TABLE ONLY writersfilm
 --
 
 CREATE UNIQUE INDEX index_apelido ON usuario USING btree (us_apelido);
-
-
---
--- Name: index_codigo; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
---
-
-CREATE UNIQUE INDEX index_codigo ON amizade USING btree (am_codigo);
 
 
 --
@@ -10103,6 +10126,30 @@ ALTER TABLE ONLY actorsfilm
 
 ALTER TABLE ONLY writersfilm
     ADD CONSTRAINT fk_filmid FOREIGN KEY (idfilm) REFERENCES films(filmid);
+
+
+--
+-- Name: fk_idfilm; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY recommendationsfromfriends
+    ADD CONSTRAINT fk_idfilm FOREIGN KEY (idfilm) REFERENCES films(filmid);
+
+
+--
+-- Name: fk_idusuario; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY recommendationsfromfriends
+    ADD CONSTRAINT fk_idusuario FOREIGN KEY (idusuario) REFERENCES usuario(us_codigo);
+
+
+--
+-- Name: fk_usuarioCodigo; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY film_perfils
+    ADD CONSTRAINT "fk_usuarioCodigo" FOREIGN KEY (idusuario) REFERENCES usuario(us_codigo);
 
 
 --

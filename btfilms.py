@@ -28,7 +28,7 @@ urls = (
 app = web.application(urls, globals(),autoreload=False)
 store = web.session.DiskStore(os.path.join(abspath,'sessions'))
 session = web.session.Session(app, store,
-				initializer={'login': 0, 'ident': None,'nome':None,'apelido':None})
+				initializer={'login': 0, 'ident': None,'nome':None,'apelido':None,'email':None})
 
 db = web.database(dbn='postgres', db='rsdb2012', user='postgres', pw='123')
 
@@ -40,7 +40,7 @@ render = render_jinja(
 
 def index_default():
 	films = model.selectFilms(30)
-	return render.index(films=films,logado=session.login,apelido=session.apelido)
+	return render.index(films=films,logado=session.login,apelido=session.apelido,email=session.email)
 
 class Index:
 	def GET(self):
@@ -60,12 +60,20 @@ class About:
 class Alterar:
 	def GET(self):
 		
-		usuario = [{
-			'nome': ['nome']
-			
-		}]
-		perfil = "checked"
-		
+		#perfil = "checked"
+		cod = session.ident	
+		usuario = db.select('usuario', where='us_codigo=$cod', vars=locals())[0]
+		try:
+			perfil = db.select('film_perfils',where='idusuario=$cod', vars=locals())[0]
+		except:
+			perfil = {}
+
+		for k, v in perfil.iteritems():
+			if v:
+				perfil[k] = 'checked'
+			else:
+				perfil[k] = ""
+
 		return render.alterar(usuario = usuario, perfil = perfil,logado=session.login,nome=session.nome,apelido=session.apelido)
         
 class Amigos:
@@ -180,26 +188,25 @@ def get_genre_qry(query):
 
 
 
-#TODO: Linkar query com o model
-class MainSearch:	#pra pagar meus pecados essa query de generos
+class MainSearch:	
 	def GET(self):
 		request = web.input()
-#		try:
-		query = str(request['query'])		
-		attbr = str(request['attbr'])
-		if attbr != "" and attbr != "genre":
-			q="%s ~* '%s'" % (attbr,query)
-		elif attbr == "genre":
-			q = get_genre_qry(query)
-		else:
-			q2 = get_genre_qry(query)
-			#if qry_genre != "":
-			q="a.name ~* '%s' OR d.name ~* '%s' OR w.name ~* '%s' OR f.title ~* '%s' OR %s" % (query,query,query,query,q2)
+		try:
+			query = str(request['query'])		
+			attbr = str(request['attbr'])
+			if attbr != "" and attbr != "genre":
+				q="%s ~* '%s'" % (attbr,query)
+			elif attbr == "genre":
+				q = get_genre_qry(query)
+			else:
+				q2 = get_genre_qry(query)
+				#if qry_genre != "":
+				q="a.name ~* '%s' OR d.name ~* '%s' OR w.name ~* '%s' OR f.title ~* '%s' OR %s" % (query,query,query,query,q2)
 
-		films = model.selectFilmsWhere(40,q)
-		return render_search_qry(films)
-#		except:
-#			return "Houston, we have a problem!"
+			films = model.selectFilmsWhere(40,q)
+			return render_search_qry(films)
+		except:
+			return "Houston, we have a problem!"
 
 class FindFriends:
 	def GET(self):

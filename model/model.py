@@ -23,6 +23,9 @@ class Usuario:
 	
 class Amizade:
 	pass
+	
+class Perfil:
+	pass
 
 ############################## UTILS - Mount Films
 
@@ -115,7 +118,7 @@ def mountWriters(writers):
 		ret.append(mounted)
 	return ret
 
-############################## UTILS - Mount Usuarios --> us_codigo, us_nome, us_cpf, us_email, us_apelido, us_senha
+############################## UTILS - Mount Usuarios
 def mountUsuarios(usuarios):
 	ret = []
 	for usuario in usuarios:
@@ -140,6 +143,40 @@ def mountAmizades(amizades):
 		mounted.am_confianca = amizade[3]
 		ret.append(mounted)
 	return ret
+	
+############################## UTILS - Mount Perfil
+def mountPerfil(listPerfil):
+	if len(listPerfil):
+		mounted = Perfil()
+		mounted.idUsuario = listPerfil[0]
+		mounted.unknown = listPerfil[1]
+		mounted.action = listPerfil[2]
+		mounted.adventure = listPerfil[3]
+		mounted.animation = listPerfil[4]
+		mounted.children = listPerfil[5]
+		mounted.comedy = listPerfil[6]
+		mounted.crime = listPerfil[7]
+		mounted.documentary = listPerfil[8]
+		mounted.drama = listPerfil[9]
+		mounted.fantasy = listPerfil[10]
+		mounted.filmnoir = listPerfil[11]
+		mounted.horror = listPerfil[12]
+		mounted.musical = listPerfil[13]
+		mounted.mystery = listPerfil[14]
+		mounted.romance = listPerfil[15]
+		mounted.scifi = listPerfil[16]
+		mounted.thriller = listPerfil[17]
+		mounted.war = listPerfil[18]
+		mounted.western = listPerfil[19]
+		mounted.genres = []
+		i = 1
+		while i <= 19:
+			if listPerfil[i] == '1':
+				mounted.genres.append(mapGeneros[i - 3])
+			i += 1
+	else:
+		return None
+	return mounted
 
 ############################## INSERT - Director	
 def insertDirector(name):
@@ -368,10 +405,19 @@ def selectUsuarioApelido(apelido):
 	ordem.close()
 	return usuarios
 
-############################## SELECT - Usuario - Login
-def selectUsuarioLogin(apelido, senha):
+############################## SELECT - Usuario - Login(by email e senha)
+def selectUsuarioLogin(email, senha):
 	ordem = conexao.cursor()
-	ordem.execute('SELECT * FROM usuario WHERE us_apelido = %s and us_senha = %s;', [apelido, senha])
+	ordem.execute('SELECT * FROM usuario WHERE us_email = %s and us_senha = %s;', [email, senha])
+	auxUsuarios = ordem.fetchall()
+	usuarios = mountUsuarios(auxUsuarios)
+	ordem.close()
+	return usuarios
+	
+############################## SELECT - Usuario - Nome ou Apelido
+def selectUsuarioNomeApelido(apelido, nome):
+	ordem = conexao.cursor()
+	ordem.execute('SELECT * FROM usuario WHERE us_apelido = %s OR us_nome = %s;', [apelido, nome])
 	auxUsuarios = ordem.fetchall()
 	usuarios = mountUsuarios(auxUsuarios)
 	ordem.close()
@@ -403,6 +449,23 @@ def selectRecommendationsFromFriends(usuario_id, top):
 	films = mountFilms(auxFilms, top)
 	ordem.close()
 	return films
+	
+############################## SELECT - Perfil by idUsuario
+def selectPerfil(idUsuario):
+	ordem = conexao.cursor()
+	ordem.execute('SELECT * FROM film_perfils WHERE idUsuario = %s;', [idUsuario])
+	auxPerfil = ordem.fetchone()
+	perfil = mountPerfil(auxPerfil)
+	ordem.close()
+	return perfil
+	
+############################## DELETE - Usuario by id
+def selectUsuarioId(idUsuario):
+	ordem = conexao.cursor()
+	ordem.execute('DELETE FROM usuario WHERE us_codigo = %s;', [idUsuario])
+	conexao.commit()
+	ordem.close()
+	return None
 
 ############################## RECOMENDACAO by Perfil
 def recomendacaoUsuario(idUsuario, top):
@@ -422,6 +485,12 @@ def recomendacaoUsuarioFromFriends(idUsuario, top):
 	ordem.close()
 	return films
 
+
+# OK - Implementar funcao de recuperacao do perfil do usuario by idUsuario
+# OK - Deletar perfil do usuario pelo idUsuario
+# Update usuario
+# OK - Selecionar usuario por nome ou apelido
+# OK - Selecionar usuario por email **** O LOGIN É FEITO POR EMAIL
 
 ############################## Cadastro Film Test
 #\actors = ['actor1', 'actor2', 'actor3']

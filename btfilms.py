@@ -97,8 +97,9 @@ class Alterar:
 		ones = ','.join(ones_aux)
 		#logging.error(request)
 		db.query("DELETE FROM film_perfils WHERE idusuario=$ident",vars={'ident':session.ident})
-		q = "INSERT INTO film_perfils(idusuario,%s) VALUES(%s,%s)" % (genres,session.ident,ones)		
-		db.query(q)
+		if genres_aux:
+			q = "INSERT INTO film_perfils(idusuario,%s) VALUES(%s,%s)" % (genres,session.ident,ones)		
+			db.query(q)
 
 	
 		us_nome = web.input().name

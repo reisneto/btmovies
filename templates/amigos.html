@@ -17,11 +17,16 @@
 										<p> <strong>Apelido:</strong> {{ usuario.us_apelido }} </p>
 										{% if logado: %}
 										<p><strong>Email:</strong> {{ usuario.us_email }} </p>
-										<p><strong> Confiança:</strong> <i class="icon-star-empty"></i> 
-											<i class="icon-star-empty"></i> 
-											<i class="icon-star-empty"></i>
-											<i class="icon-star-empty"></i>
-											<i class="icon-star-empty"></i> 
+											<form class="form-inline" name="trust_value" method="POST" action="/trustvalue">
+										<p><strong> Confiança:</strong> 
+											<select onchange="this.form.submit()" id="trust" name="trust">
+													<option value="0" {{ selected }}>Sem nota</option>
+													<option value="1" {{ selected }}>1</option>
+													<option value="2" {{ selected }}>2</option>
+													<option value="3" {{ selected }}>3</option>
+													<option value="4" {{ selected }}>4</option>
+													<option value="5" {{ selected }}>5</option>
+									</select></form>
 											</p>
 										{% endif %}
 									</div>

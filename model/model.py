@@ -129,6 +129,8 @@ def mountUsuarios(usuarios):
 		mounted.us_email = usuario[3]
 		mounted.us_apelido = usuario[4]
 		mounted.us_senha = usuario[5]
+		if len(usuario) > 6:
+			mounted.confianca = usuario[6]
 		ret.append(mounted)
 	return ret
 	
@@ -297,7 +299,7 @@ def insertAmizade(usuario, amigo, confianca):
 	return idAmizade
 	
 ############################## INSERT - RecommendationsFromFriends
-def insertAmizade(idUsuario, idFilm):
+def insertRecommendation(idUsuario, idFilm):
 	ordem = conexao.cursor()
 	try: 
 		ordem.execute('INSERT INTO recommendationsfromfriends(idusuario, idfilm) VALUES (%s, %s);', [idUsuario, idFilm])
@@ -415,9 +417,9 @@ def selectUsuarioLogin(email, senha):
 	return usuarios
 	
 ############################## SELECT - Usuario - Nome ou Apelido
-def selectUsuarioNomeApelido(apelido, nome):
+def selectUsuarioNomeApelido(nomeApelido):
 	ordem = conexao.cursor()
-	ordem.execute('SELECT * FROM usuario WHERE us_apelido = %s OR us_nome = %s;', [apelido, nome])
+	ordem.execute('SELECT * FROM usuario WHERE us_apelido ~* %s OR us_nome ~* %s;', [nomeApelido, nomeApelido])
 	auxUsuarios = ordem.fetchall()
 	usuarios = mountUsuarios(auxUsuarios)
 	ordem.close()
@@ -459,6 +461,15 @@ def selectPerfil(idUsuario):
 	ordem.close()
 	return perfil
 	
+############################## SELECT - NewOldFriends
+def selectNewOldFriends(idUsuario, name):
+	ordem = conexao.cursor()
+	ordem.execute('SELECT u.*, a.am_confianca FROM usuario u LEFT OUTER JOIN amizade a ON a.am_amigo = u.us_codigo AND a.am_usuario = %s WHERE u.us_codigo != %s AND (u.us_nome ~* %s OR u.us_apelido ~* %s);', [idUsuario, idUsuario, name, name])
+	auxUsuarios = ordem.fetchall()
+	usuarios = mountUsuarios(auxUsuarios)
+	ordem.close()
+	return usuarios
+
 ############################## DELETE - Usuario by id
 def selectUsuarioId(idUsuario):
 	ordem = conexao.cursor()
@@ -466,6 +477,8 @@ def selectUsuarioId(idUsuario):
 	conexao.commit()
 	ordem.close()
 	return None
+	
+
 
 ############################## RECOMENDACAO by Perfil
 def recomendacaoUsuario(idUsuario, top):
@@ -490,17 +503,17 @@ def recomendacaoUsuarioFromFriends(idUsuario, top):
 # OK - Deletar perfil do usuario pelo idUsuario
 # Update usuario
 # OK - Selecionar usuario por nome ou apelido
-# OK - Selecionar usuario por email **** O LOGIN É FEITO POR EMAIL
+# OK - Selecionar usuario por email  O LOGIN E FEITO POR EMAIL
 
 ############################## Cadastro Film Test
 #\actors = ['actor1', 'actor2', 'actor3']
 #writers = ['writer1', 'writer2', 'writer3']
 #insertFilm('film1', 'film1.com', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', 9.0, 'director1', 2012, 'sinopse1', 'image_1.jpg', actors, writers)
 
-filmes = selectRecommendationsFromFriends(3, 10)
+filmes = selectUsuarioNomeApelido('alison')
 #filmes = selectFilms(10)
 for filme in filmes:
-	print filme.title
+	print filme.us_nome
 
 #conexao.close()
 

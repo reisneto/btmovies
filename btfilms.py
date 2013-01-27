@@ -267,12 +267,15 @@ class MainSearch:
 
 class Rec4Friends:
 	def GET(self):
-		films = model.selectFilms(3)
+#		films = model.selectFilms(3)
+		films = model.recomendacaoUsuarioFromFriends(session.ident, 30)
 		return render.index(films=films,logado=session.login,apelido=session.apelido,email=session.email,activeFriends="active")
 
 class Rec4You:
 	def GET(self):
-		films = model.selectFilms(5)
+#		films = model.selectFilms(5)
+		films = model.recomendacaoUsuario(session.ident, 30)
+
 		return render.index(films=films,logado=session.login,apelido=session.apelido,email=session.email,activeYou="active")
 
 

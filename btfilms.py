@@ -23,6 +23,8 @@ urls = (
 	'/alterar','Alterar',
 	'/amigos','Amigos',
 	'/search','MainSearch',
+	'/rec4friends','Rec4Friends',
+	'/rec4you','Rec4You',
 	'/.*','Index',
 )
 
@@ -46,11 +48,10 @@ render = render_jinja(
 
 def index_default():
 	films = model.selectFilms(30)
-	return render.index(films=films,logado=session.login,apelido=session.apelido,email=session.email)
+	return render.index(films=films,logado=session.login,apelido=session.apelido,email=session.email,activeGeral="active")
 
 class Index:
 	def GET(self):
-		logging.error("Pagina Index.html")
 		return index_default()
 
 class Logged:
@@ -198,7 +199,7 @@ class Logout:
 
 #--------------- AREA DE BUSCAS -----------------
 def render_search_qry(films):
-	return render.index(films=films,logado=session.login,apelido=session.apelido)
+	return render.index(films=films,logado=session.login,apelido=session.apelido,activeGeral="active")
 
 def get_genre_qry(query):
 	qry = query.lower()
@@ -263,6 +264,17 @@ class MainSearch:
 			return render_search_qry(films)
 		except:
 			return "Houston, we have a problem!"
+
+class Rec4Friends:
+	def GET(self):
+		films = model.selectFilms(3)
+		return render.index(films=films,logado=session.login,apelido=session.apelido,email=session.email,activeFriends="active")
+
+class Rec4You:
+	def GET(self):
+		films = model.selectFilms(5)
+		return render.index(films=films,logado=session.login,apelido=session.apelido,email=session.email,activeYou="active")
+
 
 class FindFriends:
 	def GET(self):

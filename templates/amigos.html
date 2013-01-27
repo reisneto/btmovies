@@ -8,6 +8,7 @@
 				  <div class="container-fluid">
 						{% if usuarios %}	
 						  {% for usuario in usuarios %}
+						  	{% if usuario.us_email != user_email %}
 							  <div class="row-fluid">
 							  		<div class="span2">
 											<img src="static/user_images/thundercats.jpg" width="150" height="100" />
@@ -17,21 +18,21 @@
 										<p> <strong>Apelido:</strong> {{ usuario.us_apelido }} </p>
 										{% if logado: %}
 										<p><strong>Email:</strong> {{ usuario.us_email }} </p>
-											<form class="form-inline" name="trust_value" method="POST" action="/trustvalue">
 										<p><strong> Confiança:</strong> 
-											<select onchange="this.form.submit()" id="trust" name="trust">
+										<select onchange="get_trust(this.value,'{{ usuario.us_email }}')" id="trust" name="trust">
 													<option value="0" {{ selected }}>Sem nota</option>
 													<option value="1" {{ selected }}>1</option>
 													<option value="2" {{ selected }}>2</option>
 													<option value="3" {{ selected }}>3</option>
 													<option value="4" {{ selected }}>4</option>
 													<option value="5" {{ selected }}>5</option>
-									</select></form>
+											</select>
 											</p>
 										{% endif %}
 									</div>
 							  </div>
 							  <hr/>
+							 {% endif %}
 						  {% endfor %}
 	  				  {% else %}
 						  <div class="row-fluid">

@@ -25,6 +25,7 @@ urls = (
 	'/search','MainSearch',
 	'/rec4friends','Rec4Friends',
 	'/rec4you','Rec4You',
+	'/trustvalue/(.*)/(\d)','TrustValue',
 	'/.*','Index',
 )
 
@@ -129,7 +130,7 @@ class Amigos:
 		try:
 			nome = web.input().nome
 			usuarios = db.query("SELECT * FROM usuario WHERE us_nome ~* $nome OR us_apelido ~* $nome",vars={'nome':nome})
-			return render.amigos(logado=session.login, apelido=session.apelido,usuarios=usuarios)
+			return render.amigos(logado=session.login, apelido=session.apelido,usuarios=usuarios,user_email = session.email)
 		except:
 			return "You're not a hacker, get out!"
 
@@ -279,6 +280,12 @@ class Rec4You:
 
 		return render.index(films=films,logado=session.login,apelido=session.apelido,email=session.email,activeYou="active")
 
+class TrustValue:
+	def GET(self,email,confianca):
+		amigo = db.query("SELECT us_codigo FROM usuario WHERE us_email=$email",vars={'email':email})[0]
+		db.query("DELETE FROM amizade WHERE am_usuario=$user AND am_amigo=$friend",vars={'user':session.ident,'friend':amigo['us_codigo']})
+		model.insertAmizade(session.ident, amigo['us_codigo'],confianca)
+		return "\o/"
 
 class FindFriends:
 	def GET(self):

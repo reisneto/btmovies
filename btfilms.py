@@ -21,6 +21,7 @@ urls = (
 	'/.json','JsonFilms',
 	'/about','About',
 	'/alterar','Alterar',
+	'/cadfilme','Cadfilme',
 	'/amigos','Amigos',
 	'/search','MainSearch',
 	'/rec4friends','Rec4Friends',
@@ -135,6 +136,17 @@ class Amigos:
 			return render.amigos(logado=session.login, apelido=session.apelido,usuarios=usuarios,user_email = session.email)
 		except:
 			return "You're not a hacker, get out!"
+
+class Cadfilme:
+	def GET(self):
+
+		usuario = [{
+			'nome': ['nome']
+			
+		}]
+		perfil = "checked"
+
+		return render.cadfilme(usuario = usuario, perfil = perfil)
 
 def logged():
 	if session.login==1:

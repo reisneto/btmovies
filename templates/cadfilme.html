@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row-fluid">
+		<div class="span3"></div>
+		
+
+		<div class="span6">
+			    <h2>Cadastro Filmes</h2>
+			<form class="well" name="frm_cadfilm" style="min-height: 750px;" method="get" action="/cadfilm">
+				
+				<div class="span6"> 
+					  
+					   <div class="fileupload fileupload-new" data-provides="fileupload">
+						<div class="fileupload-preview thumbnail" style="width: 200px; height: 150px;"></div>
+						<div>
+						  <span class="btn btn-file">
+								<span class="fileupload-new">Select image</span>
+								<span class="fileupload-exists">Change</span>
+								<input type="file" />
+						  </span>
+						  <a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
+						</div>
+        				      </div>			
+					   							 
+					
+						
+					  <label>Título:</label> <input placeholder="Digite o título do filme aqui" name="titulo" type="text"  />
+					  <label>Link Imdb</label> <input placeholder="Digite o link do filme aqui" name="imdb" type="password"/>
+					  <label>Autor:</label> <input  placeholder="Digite o nome do autor" name="autor" type="text"/>
+					  
+					  <label>Atores Principais:</label> <input placeholder="Digite seu cpf aqui" name="cpf" type="text" value=" {{ usuario.us_cpf }}" />
+					  
+					  
+					  <label>Roteirista:</label> <input placeholder="Digite o nome do roteirista aqui" name="roteirista" type="text" />
+					  <label>Nota:</label> <input placeholder="Digite a sua nota do filme aqui" name="nota" type="text"/>
+					  				  
+					  <label>Sinopse</label> <input placeholder="Digite sua nova senha novamente" name="sinopse" type="password"/>
+					  <label>Ano</label> <input placeholder="Digite o ano do filme aqui" name="ano" type="text"/>
+					  <label>
+							  <input type="submit" class="btn" value="Enviar" />
+					  </label>
+				</div>
+				<h3>Gêneros do Filme</h3>
+				<div class="span3"> 
+					  <label style="padding-bottom: 15px;" ><input name="unknown" type="checkbox"   /> Unknown</label>
+					  <label style="padding-bottom: 15px;"><input name="action" type="checkbox"  /> Action</label> 
+					  <label style="padding-bottom: 15px;"><input name="adventure" type="checkbox" /> Adventure</label> 
+					  <label style="padding-bottom: 15px;"><input name="animation" type="checkbox" /> Animation</label> 
+					  <label style="padding-bottom: 15px;"><input name="children" type="checkbox"   /> Children</label> 
+					  <label style="padding-bottom: 15px;"><input name="comedy" type="checkbox"   /> Comedy</label> 
+					  <label style="padding-bottom: 15px;"><input name="crime" type="checkbox"  /> Crime</label> 
+					  <label style="padding-bottom: 15px;"><input name="documentary" type="checkbox"   /> Documentary</label>
+					  <label style="padding-bottom: 15px;"><input name="drama" type="checkbox"   /> Drama</label> 
+					  <label style="padding-bottom: 15px;"><input name="fantasy" type="checkbox"  /> Fantasy</label>
+				</div>
+				<div class="span3">
+					  
+					  <label style="padding-bottom: 15px;"><input name="filmnoir" type="checkbox"  {{ perfil.filmnoir }} /> Filmnoir</label> 
+					  <label style="padding-bottom: 15px;"><input name="horror" type="checkbox"  {{ perfil.horror }} /> Horror</label> 
+					  <label style="padding-bottom: 15px;"><input name="musical" type="checkbox"  {{ perfil.musical }} /> Musical</label> 
+					  <label style="padding-bottom: 15px;"><input name="mistery" type="checkbox"  {{ perfil.mistery }} /> Mistery</label> 
+					  <label style="padding-bottom: 15px;"><input name="romance" type="checkbox"  {{ perfil.romance }} /> Romance</label> 
+					  <label style="padding-bottom: 15px;"><input name="scifi" type="checkbox"  {{ perfil.scifi }} /> Scifi</label> 
+					  <label style="padding-bottom: 15px;"><input name="thriller" type="checkbox"  {{ perfil.thriller }} /> Thriller</label> 
+					  <label style="padding-bottom: 15px;"><input name="war" type="checkbox"  {{ perfil.war }} /> War</label> 
+					  <label style="padding-bottom: 15px;"><input name="western" type="checkbox"  {{ perfil.western }} /> Western</label> 
+					  
+			        </div>
+			    
+			    <!-- Button to trigger modal -->
+			</form>
+		
+</div>
+{% endblock content %}
+

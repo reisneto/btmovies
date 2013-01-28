@@ -471,7 +471,7 @@ def selectNewOldFriends(idUsuario, name):
 	return usuarios
 
 ############################## DELETE - Usuario by id
-def selectUsuarioId(idUsuario):
+def deleteUsuarioId(idUsuario):
 	ordem = conexao.cursor()
 	ordem.execute('DELETE FROM usuario WHERE us_codigo = %s;', [idUsuario])
 	conexao.commit()

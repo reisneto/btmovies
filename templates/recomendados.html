@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block content %}
+		<div class="span12">
+			<h2> Filmes que voce recomendou </h2>
+		   
+		  <div class="row-fluid">
+			  <div class="tabbable offset1 span10">
+			
+				  <div class="tab-pane active container-fluid">
+						  {% for film in films %}
+							  <div class="row-fluid">
+							  		<div class="span2">
+											<img src="static/film_images/{{ film.image }}" width="150" height="100" alt="{{ film.title  }} thumb" />
+									</div>
+									<div class="span3">
+										<p> <i class="icon-film"></i> <strong> Titulo:</strong> {{ film.title }} </p>
+										<p> <i class="icon"></i> <strong> Diretor:</strong> {{ film.director }} </p>
+										<p> <i class="icon-arrow-right"></i> <a href="{{ film.imdb }}" target="_blank"> Mais Detalhes</a>
+										<p> <i class="icon-star-empty"></i><strong> Estrelas:</strong>
+											{% for actor in film.actors %}
+												{% if loop.index < film.actors|length %}
+													{{ actor }},
+												{% else %}
+													{{ actor }}
+												{% endif %}
+											{% endfor %}
+										</p>
+										<p>	<strong> Escritores:</strong>
+											{% for writer in film.writers %}
+												{% if loop.index < film.writers|length %}
+													{{ writer }},
+												{% else %}
+													{{ writer }}
+												{% endif %}
+											{% endfor %}
+	
+										</p>
+
+									</div>
+									<div class="span6">
+											<p>	{{ film.sinopse }}<p> 
+											<p><strong> Ano: </strong> {{ film.year }} </p>
+											<p><strong>Gêneros: </strong>
+												{% for genre in film.genres %}
+													{% if loop.index < film.genres|length %}
+														{{ genre }},
+													{% else %}
+														{{ genre }}
+													{% endif %}
+												{% endfor %}
+
+											</p>
+											<p><strong>Rating:</strong> {{ film.rating }}</p>
+									</div>
+							  </div>
+							  <hr/>
+						  {% endfor %}
+				  </div>
+				  </div> <!-- tab content I think -->
+            </div><!--/span-->
+		</div><!--/row-->
+
+{% endblock content %}

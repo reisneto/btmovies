@@ -27,6 +27,7 @@ urls = (
 	'/rec4you','Rec4You',
 	'/trustvalue/(.*)/(\d)','TrustValue',
 	'/recommend/(\d+)','RecommendFilm',
+	'/recomendado','Recomendado',
 	'/.*','Index',
 )
 
@@ -291,8 +292,16 @@ class TrustValue:
 
 class RecommendFilm:
 	def GET(self,filmid):
-		model.insertRecommendation(session.ident, filmid)
-		return "recomendado"
+		response = "oops, n inventa moda"
+		if logged():
+			model.insertRecommendation(session.ident, filmid)
+			response = "recomendado"
+		return response
+
+class Recomendado:
+	def GET(self):
+		films = model.selectRecommendationsFromFriends(session.ident, 50)
+		return render.recomendados(films=films,logado=session.login,apelido=session.apelido,email=session.email)
 
 class FindFriends:
 	def GET(self):

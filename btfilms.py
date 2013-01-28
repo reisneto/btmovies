@@ -26,6 +26,7 @@ urls = (
 	'/rec4friends','Rec4Friends',
 	'/rec4you','Rec4You',
 	'/trustvalue/(.*)/(\d)','TrustValue',
+	'/recommend/(\d+)','RecommendFilm',
 	'/.*','Index',
 )
 
@@ -287,6 +288,11 @@ class TrustValue:
 		if confianca != '0':
 			model.insertAmizade(session.ident, amigo['us_codigo'],confianca)
 		return "\o/"
+
+class RecommendFilm:
+	def GET(self,filmid):
+		model.insertRecommendation(session.ident, filmid)
+		return "recomendado"
 
 class FindFriends:
 	def GET(self):

@@ -10,3 +10,12 @@ function get_trust(tvalue,email){
 			}
 		})
 	}
+function recommend(filmid){
+		$.ajax({
+			type:'GET',
+			url: '/recommend/'+filmid,
+			success: function(response){
+				alert(response);
+			}
+		})
+	}

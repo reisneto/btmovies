@@ -284,7 +284,8 @@ class TrustValue:
 	def GET(self,email,confianca):
 		amigo = db.query("SELECT us_codigo FROM usuario WHERE us_email=$email",vars={'email':email})[0]
 		db.query("DELETE FROM amizade WHERE am_usuario=$user AND am_amigo=$friend",vars={'user':session.ident,'friend':amigo['us_codigo']})
-		model.insertAmizade(session.ident, amigo['us_codigo'],confianca)
+		if confianca != '0':
+			model.insertAmizade(session.ident, amigo['us_codigo'],confianca)
 		return "\o/"
 
 class FindFriends:

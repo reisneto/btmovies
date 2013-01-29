@@ -77,16 +77,13 @@
       this.$hidden.attr('name', '')
       this.$input.attr('name', this.name)
 
-
-
       if (this.type === "image" && this.$preview.length > 0 && (typeof file.type !== "undefined" ? file.type.match('image.*') : file.name.match('\\.(gif|png|jpe?g)$')) && typeof FileReader !== "undefined") {
-	        
-	var reader = new FileReader()
+        var reader = new FileReader()
         var preview = this.$preview
         var element = this.$element
 
         reader.onload = function(e) {
-          preview.html('<img   src="' + e.target.result + '" ' + (preview.css('max-height') != 'none' ? ' style="max-height: ' + preview.css('max-height') + ';"' : '') + '  />')
+          preview.html('<img src="' + e.target.result + '" ' + (preview.css('max-height') != 'none' ? 'style="max-height: ' + preview.css('max-height') + ';"' : '') + ' />')
           element.addClass('fileupload-exists').removeClass('fileupload-new')
         }
 

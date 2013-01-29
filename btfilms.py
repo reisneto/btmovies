@@ -8,6 +8,7 @@ import model
 import json
 import logging
 import time
+import shutil
 from web.contrib.template import render_jinja
 
 web.config.debug = False
@@ -139,14 +140,152 @@ class Amigos:
 
 class Cadfilme:
 	def GET(self):
+		return render.cadfilme()
 
-		usuario = [{
-			'nome': ['nome']
-			
-		}]
-		perfil = "checked"
+	def POST(self):
+		title = web.input().title
+		imdb = web.input().imdb
+		rating = web.input().rating
+		director = web.input().director
+		sinopse = web.input().sinopse
+		year = web.input().year
+		
+		
+		try :
+			web.input().unknown 	
+			unknown = 1
+		except:
+			unknown = 0
+		
+		try :
+			web.input().action 	
+			action = 1
+		except:
+			action = 0	
+		
+		try :
+			web.input().adventure 	
+			adventure = 1
+		except:
+			adventure = 0	
+	
+		try :
+			web.input().animation 	
+			animation = 1
+		except:
+			animation = 0			
+		
+		try :
+			web.input().children 	
+			children = 1
+		except:
+			children = 0	
 
-		return render.cadfilme(usuario = usuario, perfil = perfil)
+		try :
+			web.input().comedy 	
+			comedy = 1
+		except:
+			comedy = 0	
+
+		try :
+			web.input().crime 	
+			crime = 1
+		except:
+			crime = 0			
+		
+		try :
+			web.input().documentary 	
+			documentary = 1
+		except:
+			documentary = 0
+		
+		try :
+			web.input().drama 	
+			drama = 1
+		except:
+			drama = 0
+		
+		try :
+			web.input().fantasy 	
+			fantasy = 1
+		except:
+			fantasy = 0
+
+		try :
+			web.input().filmnoir 	
+			filmnoir = 1
+		except:
+			filmnoir = 0
+
+		try :
+			web.input().horror 	
+			horror = 1
+		except:
+			horror = 0
+
+		try :
+			web.input().musical 	
+			musical = 1
+		except:
+			musical = 0
+		
+		try :
+			web.input().mystery  	
+			mystery  = 1
+		except:
+			mystery  = 0
+		
+		try :
+			web.input().romance 	
+			romance = 1
+		except:
+			romance = 0
+		
+		try :
+			web.input().scifi 	
+			scifi = 1
+		except:
+			scifi = 0
+
+
+		try :
+			web.input().thriller 	
+			thriller = 1
+		except:
+			thriller = 0
+
+		try :
+			web.input().war 	
+			war = 1
+		except:
+			war = 0
+
+		try :
+			web.input().western 	
+			western = 1
+		except:
+			western = 0
+		
+		
+		actorsString  =  web.input().actors
+		actors = actorsString.split(', ')
+	
+		writerString  =  web.input().writers
+		writers = writerString.split(', ')
+				
+		
+		form = web.input(imagepath={})
+		imagename = form['imagepath'].filename
+		
+		with open('static/film_images/' + imagename, 'wb')  as saved:
+			shutil.copyfileobj(form['imagepath'].file, saved)
+		image = imagename
+		model.insertFilm(title, imdb, unknown, action, adventure, animation, children, comedy, crime, documentary, drama, fantasy, filmnoir, horror, musical, mystery, romance, scifi, thriller, war, western, rating, director, year, sinopse, image, actors, writers)
+		
+		
+	
+		return  render.cadfilme()
+	
 
 def logged():
 	if session.login==1:

@@ -9,6 +9,8 @@ import json
 import logging
 import time
 import shutil
+import re
+import base64
 from web.contrib.template import render_jinja
 
 web.config.debug = False
@@ -23,6 +25,7 @@ urls = (
 	'/about','About',
 	'/alterar','Alterar',
 	'/cadfilme','Cadfilme',
+	'/adminAuth','Admin',
 	'/amigos','Amigos',
 	'/search','MainSearch',
 	'/rec4friends','Rec4Friends',
@@ -33,6 +36,12 @@ urls = (
 	'/.*','Index',
 )
 
+allowed = (
+    ('alvaro','fodao'),
+    ('alison','machuca'),
+	('tiago','mocinha'),
+	('altigran','123')
+)
 
 app = web.application(urls, globals(),autoreload=False)
 if web.config.get('_session') is None:
@@ -138,9 +147,32 @@ class Amigos:
 		except:
 			return "You're not a hacker, get out!"
 
+class Admin:
+	def GET(self):
+		auth = web.ctx.env.get('HTTP_AUTHORIZATION')
+		authreq = False
+		if auth is None:
+			authreq = True
+		else:
+			auth = re.sub('^Basic ','',auth)
+			username,password = base64.decodestring(auth).split(':')
+			if(username,password) in allowed:
+				raise web.seeother('/cadfilme')
+			else:
+				authreq = True
+			
+		if authreq:
+			web.header('WWW-Authenticate','Basic realm="Auth example"')
+			web.ctx.status = '401 Unauthorized'
+			return
+
 class Cadfilme:
 	def GET(self):
-		return render.cadfilme()
+		if web.ctx.env.get('HTTP_AUTHORIZATION') is not None:
+			logging.error(web.ctx.env.get('HTTP_AUTHORIZATION'))
+			return render.cadfilme()
+		else:
+			raise web.seeother('/adminAuth')
 
 	def POST(self):
 		title = web.input().title

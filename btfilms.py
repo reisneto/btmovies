@@ -277,13 +277,14 @@ class Cadfilme:
 		form = web.input(imagepath={})
 		imagename = form['imagepath'].filename
 		
-		with open('static/film_images/' + imagename, 'wb')  as saved:
+		prev_filmid = db.query("SELECT MAX(filmid) as id FROM films")[0]['id']
+		logging.error(prev_filmid)
+		filmid = str(prev_filmid + 1)
+		with open('static/film_images/img_' + filmid, 'wb')  as saved:
 			shutil.copyfileobj(form['imagepath'].file, saved)
-		image = imagename
+		image = "img_"+str(filmid)
 		model.insertFilm(title, imdb, unknown, action, adventure, animation, children, comedy, crime, documentary, drama, fantasy, filmnoir, horror, musical, mystery, romance, scifi, thriller, war, western, rating, director, year, sinopse, image, actors, writers)
 		
-		
-	
 		return  render.cadfilme()
 	
 

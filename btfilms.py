@@ -52,7 +52,8 @@ else:
 	session = web.config._session
 
 application = app.wsgifunc()
-db = web.database(dbn='postgres', db='rsdb2012', user='postgres', pw='123')
+db = web.database(dbn='postgres', db='tp01_2012_02', user='postgres', pw='postgres', host='10.208.200.15', port='5432')
+#db = web.database(dbn='postgres', db='rsdb2012', user='postgres', pw='123')
 
 render = render_jinja(
         'templates',   # Set template directory.
@@ -338,7 +339,8 @@ class Login:
 		email, passwd = web.input().email, web.input().pwd
 		try:
 			ident = db.select('usuario', where='us_email=$email', vars=locals())[0]
-			if hashlib.sha256("sAlT754-"+passwd).hexdigest() == ident['us_senha']:
+		#	if hashlib.sha256("sAlT754-"+passwd).hexdigest() == ident['us_senha']:
+			if passwd == ident['us_senha']:
 				session.login = 1
 				session.nome = ident['us_nome']
 				session.ident = ident['us_codigo']
@@ -365,7 +367,8 @@ class Signup:
 		us_email = web.input().email
 		pwd1 = web.input().pwd
 
-		pwd =hashlib.sha256("sAlT754-"+pwd1).hexdigest()
+		#pwd =hashlib.sha256("sAlT754-"+pwd1).hexdigest()
+		pwd = pwd1
 		db.query("INSERT INTO usuario(us_nome,us_cpf,us_email,us_apelido,us_senha) VALUES($nome,$cpf,$email,$apelido,$senha)",vars={'apelido':us_apelido,'email':us_email,'senha':pwd,'cpf':us_cpf,'nome':us_nome})
 
 		usuario = db.select('usuario', where='us_email=$us_email', vars=locals())[0]

@@ -52,8 +52,8 @@ else:
 	session = web.config._session
 
 application = app.wsgifunc()
-db = web.database(dbn='postgres', db='tp01_2012_02', user='postgres', pw='postgres', host='10.208.200.15', port='5432')
-#db = web.database(dbn='postgres', db='rsdb2012', user='postgres', pw='123')
+#db = web.database(dbn='postgres', db='tp01_2012_02', user='postgres', pw='postgres', host='10.208.200.15', port='5432')
+db = web.database(dbn='postgres', db='rsdb2012', user='postgres', pw='123')
 
 render = render_jinja(
         'templates',   # Set template directory.
@@ -86,6 +86,7 @@ class Alterar:
 		cod = session.ident	
 		usuario = {}
 		try:
+########### POSSUI FUNCAO NO MODEL.PY
 			usuario = db.select('usuario', where='us_codigo=$cod', vars=locals())[0]
 			perfil = db.select('film_perfils',where='idusuario=$cod', vars=locals())[0]
 		except:

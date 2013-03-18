@@ -2,8 +2,8 @@ import psycopg2
 import logging
 
 try:
-	conexao = psycopg2.connect("dbname=tp01_2012_02 user=postgres password=postgres host='10.208.200.15' port='5432'")
-#	conexao = psycopg2.connect("dbname=rsdb2012 user=postgres password=123")
+#	conexao = psycopg2.connect("dbname=tp01_2012_02 user=postgres password=postgres host='10.208.200.15' port='5432'")
+	conexao = psycopg2.connect("dbname=rsdb2012 user=postgres password=123")
 except:
 	logging.error("Error on connection database")
 
